@@ -1,4 +1,4 @@
-# Swine tg bot js implementation.
+# Swine tg bot nodejs implementation
 
 Idea was stolen from @fr0staman_bot.
 
