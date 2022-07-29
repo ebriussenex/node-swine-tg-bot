@@ -1,47 +1,85 @@
-import { config } from '../const/config';
-import { Pool } from 'pg';
-
+import {dbConfig} from '../const/config';
+import {Pool, QueryResultRow} from 'pg';
 
 const pool = new Pool({
-  user: config.DB_USER,
-  host: config.DB_HOST,
-  database: config.DB_NAME,
-  password: config.DB_PASSWORD,
-  port: config.DB_PORT
+  user: dbConfig.DB_USER,
+  host: dbConfig.DB_HOST,
+  database: dbConfig.DB_NAME,
+  password: dbConfig.DB_PASSWORD,
+  port: dbConfig.DB_PORT,
 });
 
+export const queries = Object.freeze({
+  getAll: async (tableName: string): Promise<QueryResultRow[]> =>
+    await getQueryResult(`SELECT * FROM ${tableName}`),
 
-export const getAll = (tableName: string) => getQueryResult(`SELECT * FROM ${tableName}`);
+  getById: async (
+      tableName: string,
+      fieldValue: string | number,
+  ): Promise<QueryResultRow> =>
+    (await queries.getByField(tableName, 'id', fieldValue))[0],
 
-export const getByField = (tableName: string, fieldName: string, fieldValue: string | number) =>
-  getQueryResult(`SELECT * FROM ${tableName} WHERE ${fieldName}=$1`, [fieldValue]);
+  getByField: async (
+      tableName: string,
+      fieldName: string,
+      fieldValue: string | number,
+  ): Promise<QueryResultRow[]> =>
+    await getQueryResult(`SELECT * FROM ${tableName} WHERE ${fieldName}=$1`, [
+      fieldValue,
+    ]),
 
+  getTopByField: async (
+      tableName: string,
+      fieldName: string,
+      limit?: number,
+  ): Promise<QueryResultRow[]> => {
+    if (typeof limit === "undefined") limit = 10;
+    return await getQueryResult(
+        `SELECT * FROM ${tableName} ORDER BY ${fieldName} DESC LIMIT $1`,
+        [limit],
+    );
+  },
 
-export const getTopByField = (tableName: string, fieldName: string, limit?: number) => {
-  if (typeof limit === undefined) limit = 10;
-  return getQueryResult(`SELECT * FROM ${tableName} ORDER BY ${fieldName} DESC LIMIT $1`, [limit]);
-};
+  create: async (
+      tableName: string,
+      insertVal: Map<string, any>,
+  ): Promise<QueryResultRow[]> => {
+    const valuesStr: string = [...insertVal.values()].join(', ');
+    const fieldsStr: string = [...insertVal.keys()].join(', ');
+    return await getQueryResult(
+        `INSERT INTO ${tableName} (${fieldsStr}) 
+      VALUES (${valuesStr}) RETURNING *`,
+    );
+  },
 
-export const create = (tableName: string, insertVal: Map<string, any>) => {
-  let valuesStr: string = [...insertVal.values()].join(', ');
-  let fieldsStr: string = [...insertVal.keys()].join(', ');
-  return getQueryResult(`INSERT INTO ${tableName} (${fieldsStr}) VALUES (${valuesStr}) RETURNING *`);
-};
+  update: async (
+      tableName: string,
+      updateField: string,
+      updateFieldVal: any,
+      setVal: Map<string, any>,
+  ): Promise<QueryResultRow[]> => {
+    const valueStr = Array.from(setVal)
+        .map(([k, v]) => k + ' = ' + v)
+        .join(', ');
+    return await getQueryResult(
+        `UPDATE ${tableName} SET (${valueStr}) WHERE ${updateField}=$1`,
+        [updateFieldVal],
+    );
+  },
+});
 
-export const update = (tableName: string, updateField: string, updateFieldVal: any, setVal: Map<string, any>) => {
-  let valueStr = Array.from(setVal).map(([k, v]) => k + ' = ' + v).join(', ');
-  return getQueryResult(`UPDATE ${tableName} SET (${valueStr}) WHERE ${updateField}=$1`, [updateFieldVal]);
-};
-
-export const getQueryResult = (query: string, params?: any[]) => {
+const getQueryResult = async (
+    query: string,
+    params?: any[],
+): Promise<QueryResultRow[]> => {
   let queryResult: any[] = [];
   if (typeof params === undefined || params!.length === 0) {
-    pool.query(query, (err: Error, res) => {
+    await pool.query(query, (err: Error, res) => {
       if (err) throw err;
       queryResult = res.rows;
     });
   } else {
-    pool.query(query, params!, (err: Error, res) => {
+    await pool.query(query, params!, (err: Error, res) => {
       if (err) throw err;
       queryResult = res.rows;
     });

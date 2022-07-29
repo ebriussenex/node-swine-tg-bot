@@ -1,22 +1,24 @@
-CREATE TABLE IF NOT EXISTS tg_users(
+CREATE TABLE IF NOT EXISTS TG_USER(
     id INT PRIMARY KEY NOT NULL,
     is_bot BOOLEAN NOT NULL,
     first_name TEXT NOT NULL,
     last_name TEXT,
     username TEXT
 );
-CREATE TABLE IF NOT EXISTS tg_chat(
+CREATE TABLE IF NOT EXISTS TG_CHAT(
     id INT PRIMARY KEY NOT NULL,
     chat_type TEXT NOT NULL,
     title TEXT,
     first_name TEXT,
     last_name TEXT
 );
-CREATE TABLE IF NOT EXISTS pig(
+CREATE TABLE IF NOT EXISTS SWINE(
     id SERIAL PRIMARY KEY NOT NULL,
+    owner_id UNIQUE NOT NULL,
     chat_id INT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     weight INT NOT NULL DEFAULT 5,
     last_time_fed TIMESTAMP DEFAULT NULL,
-    CONSTRAINT fk_chat_id_tg_chat_id FOREIGN KEY(chat_id) REFERENCES tg_chat(id) ON DELETE CASCADE
+    CONSTRAINT fk_chat_id_tg_chat_id FOREIGN KEY(chat_id) REFERENCES TG_USER(id) ON DELETE CASCADE,
+    CONSTRAINT fk_owner_id_tg_user_id FOREIGN KEY(owner_id) REFERENCES TG_USER(id) ON DELETE CASCADE
 );

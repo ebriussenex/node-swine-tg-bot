@@ -1,18 +1,27 @@
-import { Telegraf, Context } from 'telegraf'
-import { config } from './const/config' 
+import { Telegraf } from "telegraf";
+import { botConfig } from "./const/config";
+import { connection } from "./repository";
 
-console.log(`Your tg bot token is ${config.BOT_TOKEN}`);
+console.log(`Your tg bot token is ${botConfig.BOT_TOKEN}`);
 
-if(config.BOT_TOKEN === undefined) {
-    throw new Error('Bot token is not present in .env file or in env variable');
-}
+const start = async (): Promise<void> => {
+  try {
+    await connection.sync();
+    if (botConfig.BOT_TOKEN === undefined) {
+      throw new Error(
+        "Bot token is not present in .env file or in env variable"
+      );
+    }
+    const bot = new Telegraf(botConfig.BOT_TOKEN);
+    bot.command("hipster", Telegraf.reply("λ"));
+    bot.launch();
 
-const bot = new Telegraf(config.BOT_TOKEN);
+    process.once("SIGINT", () => bot.stop("SIGINT"));
+    process.once("SIGTERM", () => bot.stop("SIGTERM"));
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+};
 
-bot.command('oldschool', (ctx: { reply: (arg0: string) => any }) => ctx.reply('Hello'))
-bot.command('hipster', Telegraf.reply('λ'))
-
-bot.launch()
-
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+void start();
