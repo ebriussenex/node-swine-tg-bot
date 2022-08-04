@@ -1,24 +1,30 @@
-import { Column, DataType, Default, ForeignKey, Length, Model, Table } from "sequelize-typescript";
-import { botConfig } from "../../const/config";
-import { TgChat } from "./TgChat.model";
-import { TgUser } from "./TgUser.model";
+import {
+  Column,
+  DataType,
+  ForeignKey,
+  Length,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
+import {TgChat} from './TgChat.model';
+import {TgUser} from './TgUser.model';
 
 @Table
-export class Swine extends Model<Swine> {
-  @Column
+export class Swine extends Model {
   @Length({max: 25})
-  @Default({value: botConfig.SWINE_DEFAULT_NAME})
-  name!: string;
+  @Column(DataType.TEXT)
+    name!: string;
+  @PrimaryKey
   @ForeignKey(() => TgChat)
-  @Column
-  chatId!: number;
-  @Column
-  @Default({value: botConfig.SWINE_DEFAULT_WEIGHT})
-  weight!: number;
+  @Column(DataType.INTEGER)
+    chatId!: number;
+  @Column(DataType.INTEGER)
+    weight!: number;
   @Column(DataType.DATE)
-  @Default({value: (new Date).setDate(Date.now() - 1)})
-  lastTimeFed!: Date;
+    lastTimeFed!: Date;
+  @PrimaryKey
   @ForeignKey(() => TgUser)
-  @Column
-  ownerId!: number;
+  @Column(DataType.INTEGER)
+    ownerId!: number;
 }

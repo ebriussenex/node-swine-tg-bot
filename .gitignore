@@ -13,3 +13,6 @@ dist
 # Docker
 Dockerfile
 docker-compose.yml
+
+#pswd
+*.pem

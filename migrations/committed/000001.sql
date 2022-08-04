@@ -1,4 +1,10 @@
-DROP TABLE IF EXISTS TG_USERS, TG_CHATS, SWINES CASCADES;
+--! Previous: -
+--! Hash: sha1:dea9fb50f7f67ee1247fba0a616208e73133e104
+
+-- Enter migration here
+DROP TABLE IF EXISTS SWINES CASCADE;
+DROP TABLE IF EXISTS TG_CHATS CASCADE;
+DROP TABLE IF EXISTS TG_USERS CASCADE;
 
 CREATE TABLE IF NOT EXISTS TG_USERS(
     id INT PRIMARY KEY NOT NULL,
@@ -13,7 +19,7 @@ CREATE TABLE IF NOT EXISTS TG_CHATS(
     chat_type TEXT NOT NULL,
     title TEXT,
     first_name TEXT,
-    last_name TEXT;
+    last_name TEXT
 );
 
 CREATE TABLE IF NOT EXISTS SWINES(
@@ -34,13 +40,3 @@ CREATE TABLE IF NOT EXISTS SWINES(
       ON UPDATE CASCADE,
     PRIMARY KEY(owner_id, chat_id)
 );
-
-truncate table tg_users cascade; truncate table tg_chats cascade; truncate table tg_users cascade;
-insert into tg_users(id, is_bot,first_name) values (1, false, 'leha');
-insert into tg_chats(id, first_name,chat_type) values (1, 'leha', 'private');
-
-insert into swines(owner_id, chat_id) values (1, 1);
-select * from swines;
-select * from tg_users;
-select * from tg_chats;
-

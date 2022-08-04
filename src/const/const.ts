@@ -7,20 +7,23 @@ export const commands = Object.freeze({
   HELP: 'help',
   WEIGHT: 'weight',
   MY_SWINE: 'my_swine',
+  KILL: 'kill',
 });
 
 export const messages = Object.freeze({
   TOO_LARGE_NAME_MSG:
     `Имя слишком большое! Максимальный размер:` + `${botConfig.MAX_NAME_VALUE}`,
-  SWINE_CREATION_MSG: (name: string) =>
+  SWINE_CREATION_MSG: (name: string): string =>
     `Ого у вас родился свин! Его зовут: ${name}`,
-  SWINE_WEIGHT_MSG: (weight: string) => `Вес вашего поросенка: ${weight} кг.`,
-  SWINE_RENAME_MSG: (name: string) => `Теперь вашего свина зовут: ${name}`,
+  SWINE_WEIGHT_MSG: (weight: string): string =>
+    `Вес вашего поросенка: ${weight} кг.`,
+  SWINE_RENAME_MSG: (name: string): string =>
+    `Теперь вашего свина зовут: ${name}`,
   SWINE_WEIGHT_CHANGE_MSG: (
       name: string,
       weightChange: number,
       weight: number,
-  ) => {
+  ): string => {
     const change = weightChange > 0 ? messages.GAIN : messages.LOSS;
     return (
       `Вы покормили вашего свина. Ваш ${name} ` +
@@ -28,7 +31,7 @@ export const messages = Object.freeze({
       ` на ${weightChange} кг сала. Теперь он весит ${weight} кг`
     );
   },
-  SWINE_FEED_TIMEOUT_MSG: (h: number, min: number) =>
+  SWINE_FEED_TIMEOUT_MSG: (h: number, min: number): string =>
     `Вы уже кормили своего хряка за последние ` +
     `${botConfig.SWINE_FEED_TIMEOUT}, следующая ` +
     `покормка через ${h} ч. ${min} мин.`,
@@ -41,10 +44,15 @@ export const messages = Object.freeze({
   LOSS: 'похудел',
   GAIN: 'поправился',
   TOP_MSG: 'Топ швайнокарасей: \n',
-  TOP_ROW_MSG: (pos: number, name: string, weight: number) =>
+  TOP_ROW_MSG: (pos: number, name: string, weight: number): string =>
     `${pos}. ${name} - ${weight} кг\n`,
   SWINE_DELETE_MSG: 'Ваш поросенок был убит. Помянем',
-  SWINE_INFO_MSG: (name: string, weight: number, h: number, m: number) =>
+  SWINE_INFO_MSG: (
+      name: string,
+      weight: number,
+      h: number,
+      m: number,
+  ): string =>
     `Швайнокарась ${name}, ${weight} кг, до следующего кормления: ${h} ч. ` +
     `${m} минут`,
 });
@@ -58,5 +66,5 @@ export const dbConst = Object.freeze({
   NAME_FIELD: 'name',
   WEIGHT_FIELD: 'weight',
   LAST_TIME_FED_FIELD: 'last_time_fed',
-  TOP_AMOUNT: 10
+  TOP_AMOUNT: 10,
 });

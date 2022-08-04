@@ -7,7 +7,10 @@
     "start": "NODE_ENV=prod node ./dist/app.js",
     "start-dev": "NODE_ENV=dev node ./dist/app.js",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "zap-config-dev": "NODE_ENV=dev node ./dist/scripts/config-zapatos.js",
+    "zap-config": "NODE_ENV=prod node ./dist/scripts/config-zapatos.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate-db": "NODE_ENV=dev node ./dist/scripts/migrate-db.js"
   },
   "repository": {
     "type": "git",
@@ -21,14 +24,17 @@
   },
   "homepage": "https://github.com/athsoatle/node-swine-tg-bot#readme",
   "dependencies": {
+    "@types/shelljs": "^0.8.11",
     "datejs": "^1.0.0-rc3",
     "dotenv": "^16.0.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.21.3",
     "sequelize-typescript": "^2.1.3",
+    "shelljs": "^0.8.5",
     "telegraf": "^4.8.5",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "zapatos": "^6.0.1"
   },
   "devDependencies": {
     "@types/datejs": "^0.0.32",
@@ -40,6 +46,7 @@
     "eslint-config-google": "^0.14.0",
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1",
+    "sequelize-cli": "^6.4.1",
     "ts-node": "^10.9.1"
   }
 }

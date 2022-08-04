@@ -1,17 +1,17 @@
-import { Column, HasOne, Model, Table } from "sequelize-typescript";
-import { Swine } from "./Swine.model";
+import {Column, DataType, HasOne, Model, Table} from 'sequelize-typescript';
+import {Swine} from './Swine.model';
 
 @Table
-export class TgUser extends Model<TgUser> {
-  @Column
-  isBot!: boolean;
-  @Column
-  firstName!: string;
-  @Column
-  lastName?: string;
-  @Column
-  userName?: string;
+export class TgUser extends Model {
+  @Column(DataType.BOOLEAN)
+    isBot!: boolean;
+  @Column(DataType.TEXT)
+    firstName!: string;
+  @Column(DataType.TEXT)
+    lastName?: string;
+  @Column(DataType.TEXT)
+    userName?: string;
 
   @HasOne(() => Swine)
-  swine?: Swine;
+    swine?: Swine;
 }

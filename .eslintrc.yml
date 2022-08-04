@@ -3,8 +3,9 @@ env:
   commonjs: true
   es2021: true
   node: true
-extends:
+extends: 
   - eslint:recommended
+  - google
 parser: "@typescript-eslint/parser"
 parserOptions:
   ecmaVersion: latest
@@ -13,7 +14,7 @@ plugins:
 rules:
   require-jsdoc: 0
   new-cap:
-    - 2
+    - 0
     - capIsNewExceptions:
         - ForeignKey
         - HasMany
@@ -21,3 +22,15 @@ rules:
         - Default
         - HasOne
         - Column
+  @typescript-eslint/await-thenable: 2
+  @typescript-eslint/no-floating-promises: 2
+overrides:
+  - files:
+    - *.ts
+    - *.tsx
+  - extends:
+    - plugin:@typescript-eslint/recommended
+    - plugin:@typescript-eslint/recommended-requiring-type-checking
+  - parserOptions: 
+      project:
+        - ./tsconfig.json
