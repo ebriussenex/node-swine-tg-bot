@@ -1,26 +1,19 @@
-import {TgUser} from './model/TgUser.model';
+import * as db from 'zapatos/db';
+import type * as s from 'zapatos/schema';
+import {pool} from './pool';
+import {MessageMeta} from '../app';
+
+const TG_USERS_TABLE: s.tg_users.Table = 'tg_users';
 
 export const tgUserRepository = Object.freeze({
-  getAll: async (): Promise<TgUser[]> => await TgUser.findAll(),
-  getById: async (id: number): Promise<TgUser | null> =>
-    await TgUser.findByPk(id),
-  updateUser: async (tgUser: TgUser): Promise<void> => {
-    await TgUser.update(tgUser, {where: {id: tgUser.id}});
-  },
-  getOrCreate: async (
-      userId: number,
-      isBot: boolean,
-      firstName: string,
-      lastName?: string,
-      userName?: string,
-  ): Promise<[TgUser, boolean]> =>
-    await TgUser.findOrCreate({
-      where: {id: userId},
-      defaults: {
-        id: userId,
-        isBot: isBot,
-        lastName: lastName ?? null,
-        userName: userName ?? null,
-      },
-    }),
+  createOrUpdateUser: async (
+      meta: MessageMeta,
+  ): Promise<s.tg_users.JSONSelectable> =>
+    await db.upsert(TG_USERS_TABLE, {
+      id: meta.userId,
+      is_bot: meta.userIsBot,
+      username: meta.username,
+      first_name: meta.userFirstName,
+      last_name: meta.userLastName,
+    }, 'id').run(pool),
 });

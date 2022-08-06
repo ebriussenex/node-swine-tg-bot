@@ -1,8 +1,8 @@
 import {Telegraf} from 'telegraf';
 import {Message} from 'typegram';
-import {botConfig} from './const/config';
-import {commands} from './const/const';
-import {connection} from './repository';
+import {botConfig} from './conf/config';
+import {commands, commandsDescr, messages} from './const/const';
+import {conifgZapatos} from './scripts/config-zapatos';
 import {swineService} from './service/Swine.service';
 
 export type MessageMeta = {
@@ -12,26 +12,23 @@ export type MessageMeta = {
   chatType: string;
   userFirstName: string;
   userLastName?: string;
-  userName?: string;
+  username?: string;
   chatFirstName?: string;
   chatLastName?: string;
   chatTitle?: string;
 };
-
 console.log(`Your tg bot token is ${botConfig.BOT_TOKEN}`);
 
 const start = async (): Promise<void> => {
   try {
-    await connection.sync();
-
     if (botConfig.BOT_TOKEN === undefined) {
       throw new Error(
           'Bot token is not present in .env file or in env variable',
       );
     }
-
+    conifgZapatos();
     const bot = new Telegraf(botConfig.BOT_TOKEN);
-    bot.command('hipster', Telegraf.reply('λ'));
+
     bot.command(commands.FEED, async (ctx) => {
       await ctx.telegram.sendMessage(
           ctx.chat.id,
@@ -43,14 +40,14 @@ const start = async (): Promise<void> => {
           ctx.chat.id,
           await swineService.rename(
               meta(ctx.message),
-              ctx.message.text.split(' ')[1],
+              ctx.message.text.slice(commands.NAME.length + 2),
           ),
       );
     });
     bot.command(commands.TOP, async (ctx) => {
       await ctx.telegram.sendMessage(
           ctx.chat.id,
-          await swineService.getTop(ctx.chat.id),
+          await swineService.getTop(meta(ctx.message)),
       );
     });
     bot.command(commands.MY_SWINE, async (ctx) => {
@@ -65,7 +62,42 @@ const start = async (): Promise<void> => {
           await swineService.delete(meta(ctx.message)),
       );
     });
-    bot.launch();
+    bot.command(commands.HELP, async (ctx) => {
+      const reqCommands: string[] =
+        ctx.message.text.slice(commands.HELP.length + 2).trim().split(' ');
+      let msg = '';
+      if (reqCommands.length === 1 && reqCommands[0] === '') {
+        msg = commandsDescr.map((command, index) =>
+          `${(index + 1)}. ${command.name}\n\t${command.description}\n`,
+        ).join('');
+      } else {
+        let counter = 1;
+        commandsDescr.map(
+            (command) => {
+              if (
+                reqCommands.includes(command.name) ||
+                reqCommands.includes(command.name.slice(1))
+              ) {
+                counter++;
+                msg +=
+                  `${counter}. ${command.name}\n\t${command.description}\n`;
+              }
+            },
+        );
+      }
+      if (msg === '' && reqCommands.length === 1) {
+        msg = messages.NO_SUCH_COMMAND(reqCommands[0]);
+      }
+      await ctx.telegram.sendMessage(ctx.chat.id, msg);
+    });
+    bot.command(
+        commands.INFO,
+        async (ctx) =>
+          await ctx.telegram.sendMessage(
+              ctx.chat.id, messages.BOT_DESCRIPTION_MSG,
+          ),
+    );
+    await bot.launch();
 
     process.once('SIGINT', () => bot.stop('SIGINT'));
     process.once('SIGTERM', () => bot.stop('SIGTERM'));
@@ -92,7 +124,7 @@ function meta(msg: Message): MessageMeta {
     chatType: msg.chat.type,
     userFirstName: msg.from.first_name,
     userLastName: msg.from.last_name,
-    userName: msg.from.username,
+    username: msg.from.username,
     chatFirstName: msg.chat.type === 'group' ? undefined : msg.chat.first_name,
     chatLastName: msg.chat.type === 'group' ? undefined : msg.chat.last_name,
     chatTitle: msg.chat.type === 'private' ? undefined : msg.chat.title,

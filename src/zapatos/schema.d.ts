@@ -23,239 +23,6 @@ declare module 'zapatos/schema' {
   /* --- tables --- */
 
   /**
-   * **Swines**
-   * - Table in database
-   */
-  export namespace Swines {
-    export type Table = 'Swines';
-    export interface Selectable {
-      /**
-      * **Swines.name**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    name: string | null;
-      /**
-      * **Swines.chatId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    chatId: number;
-      /**
-      * **Swines.weight**
-      * - `int4` in database
-      * - Nullable, no default
-      */
-    weight: number | null;
-      /**
-      * **Swines.lastTimeFed**
-      * - `timestamptz` in database
-      * - Nullable, no default
-      */
-    lastTimeFed: Date | null;
-      /**
-      * **Swines.ownerId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    ownerId: number;
-      /**
-      * **Swines.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: Date;
-      /**
-      * **Swines.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: Date;
-    }
-    export interface JSONSelectable {
-      /**
-      * **Swines.name**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    name: string | null;
-      /**
-      * **Swines.chatId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    chatId: number;
-      /**
-      * **Swines.weight**
-      * - `int4` in database
-      * - Nullable, no default
-      */
-    weight: number | null;
-      /**
-      * **Swines.lastTimeFed**
-      * - `timestamptz` in database
-      * - Nullable, no default
-      */
-    lastTimeFed: db.TimestampTzString | null;
-      /**
-      * **Swines.ownerId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    ownerId: number;
-      /**
-      * **Swines.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: db.TimestampTzString;
-      /**
-      * **Swines.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: db.TimestampTzString;
-    }
-    export interface Whereable {
-      /**
-      * **Swines.name**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Swines.chatId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    chatId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Swines.weight**
-      * - `int4` in database
-      * - Nullable, no default
-      */
-    weight?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Swines.lastTimeFed**
-      * - `timestamptz` in database
-      * - Nullable, no default
-      */
-    lastTimeFed?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Swines.ownerId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    ownerId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Swines.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Swines.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-    }
-    export interface Insertable {
-      /**
-      * **Swines.name**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    name?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **Swines.chatId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    chatId: number | db.Parameter<number> | db.SQLFragment;
-      /**
-      * **Swines.weight**
-      * - `int4` in database
-      * - Nullable, no default
-      */
-    weight?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **Swines.lastTimeFed**
-      * - `timestamptz` in database
-      * - Nullable, no default
-      */
-    lastTimeFed?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **Swines.ownerId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    ownerId: number | db.Parameter<number> | db.SQLFragment;
-      /**
-      * **Swines.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
-      /**
-      * **Swines.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
-    }
-    export interface Updatable {
-      /**
-      * **Swines.name**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    name?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **Swines.chatId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    chatId?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-      /**
-      * **Swines.weight**
-      * - `int4` in database
-      * - Nullable, no default
-      */
-    weight?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **Swines.lastTimeFed**
-      * - `timestamptz` in database
-      * - Nullable, no default
-      */
-    lastTimeFed?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **Swines.ownerId**
-      * - `int4` in database
-      * - `NOT NULL`, no default
-      */
-    ownerId?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-      /**
-      * **Swines.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
-      /**
-      * **Swines.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
-    }
-    export type UniqueIndex = 'Swines_pkey';
-    export type Column = keyof Selectable;
-    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
-    export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
-    export type SQL = SQLExpression | SQLExpression[];
-  }
-
-  /**
    * **swines**
    * - Table in database
    */
@@ -804,489 +571,23 @@ declare module 'zapatos/schema' {
     export type SQL = SQLExpression | SQLExpression[];
   }
 
-  /**
-   * **TgChats**
-   * - Table in database
-   */
-  export namespace TgChats {
-    export type Table = 'TgChats';
-    export interface Selectable {
-      /**
-      * **TgChats.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgChats_id_seq"'::regclass)`
-      */
-    id: number;
-      /**
-      * **TgChats.chatType**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    chatType: string | null;
-      /**
-      * **TgChats.title**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    title: string | null;
-      /**
-      * **TgChats.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName: string | null;
-      /**
-      * **TgChats.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName: string | null;
-      /**
-      * **TgChats.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: Date;
-      /**
-      * **TgChats.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: Date;
-    }
-    export interface JSONSelectable {
-      /**
-      * **TgChats.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgChats_id_seq"'::regclass)`
-      */
-    id: number;
-      /**
-      * **TgChats.chatType**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    chatType: string | null;
-      /**
-      * **TgChats.title**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    title: string | null;
-      /**
-      * **TgChats.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName: string | null;
-      /**
-      * **TgChats.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName: string | null;
-      /**
-      * **TgChats.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: db.TimestampTzString;
-      /**
-      * **TgChats.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: db.TimestampTzString;
-    }
-    export interface Whereable {
-      /**
-      * **TgChats.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgChats_id_seq"'::regclass)`
-      */
-    id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgChats.chatType**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    chatType?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgChats.title**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    title?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgChats.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgChats.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgChats.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgChats.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-    }
-    export interface Insertable {
-      /**
-      * **TgChats.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgChats_id_seq"'::regclass)`
-      */
-    id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgChats.chatType**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    chatType?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgChats.title**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    title?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgChats.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgChats.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgChats.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
-      /**
-      * **TgChats.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
-    }
-    export interface Updatable {
-      /**
-      * **TgChats.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgChats_id_seq"'::regclass)`
-      */
-    id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgChats.chatType**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    chatType?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgChats.title**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    title?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgChats.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgChats.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgChats.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
-      /**
-      * **TgChats.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
-    }
-    export type UniqueIndex = 'TgChats_pkey';
-    export type Column = keyof Selectable;
-    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
-    export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
-    export type SQL = SQLExpression | SQLExpression[];
-  }
-
-  /**
-   * **TgUsers**
-   * - Table in database
-   */
-  export namespace TgUsers {
-    export type Table = 'TgUsers';
-    export interface Selectable {
-      /**
-      * **TgUsers.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgUsers_id_seq"'::regclass)`
-      */
-    id: number;
-      /**
-      * **TgUsers.isBot**
-      * - `bool` in database
-      * - Nullable, no default
-      */
-    isBot: boolean | null;
-      /**
-      * **TgUsers.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName: string | null;
-      /**
-      * **TgUsers.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName: string | null;
-      /**
-      * **TgUsers.userName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    userName: string | null;
-      /**
-      * **TgUsers.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: Date;
-      /**
-      * **TgUsers.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: Date;
-    }
-    export interface JSONSelectable {
-      /**
-      * **TgUsers.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgUsers_id_seq"'::regclass)`
-      */
-    id: number;
-      /**
-      * **TgUsers.isBot**
-      * - `bool` in database
-      * - Nullable, no default
-      */
-    isBot: boolean | null;
-      /**
-      * **TgUsers.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName: string | null;
-      /**
-      * **TgUsers.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName: string | null;
-      /**
-      * **TgUsers.userName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    userName: string | null;
-      /**
-      * **TgUsers.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: db.TimestampTzString;
-      /**
-      * **TgUsers.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: db.TimestampTzString;
-    }
-    export interface Whereable {
-      /**
-      * **TgUsers.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgUsers_id_seq"'::regclass)`
-      */
-    id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgUsers.isBot**
-      * - `bool` in database
-      * - Nullable, no default
-      */
-    isBot?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgUsers.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgUsers.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgUsers.userName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    userName?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgUsers.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **TgUsers.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
-    }
-    export interface Insertable {
-      /**
-      * **TgUsers.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgUsers_id_seq"'::regclass)`
-      */
-    id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgUsers.isBot**
-      * - `bool` in database
-      * - Nullable, no default
-      */
-    isBot?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgUsers.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgUsers.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgUsers.userName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    userName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **TgUsers.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
-      /**
-      * **TgUsers.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
-    }
-    export interface Updatable {
-      /**
-      * **TgUsers.id**
-      * - `int4` in database
-      * - `NOT NULL`, default: `nextval('"TgUsers_id_seq"'::regclass)`
-      */
-    id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgUsers.isBot**
-      * - `bool` in database
-      * - Nullable, no default
-      */
-    isBot?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgUsers.firstName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    firstName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgUsers.lastName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    lastName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgUsers.userName**
-      * - `text` in database
-      * - Nullable, no default
-      */
-    userName?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **TgUsers.createdAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
-      /**
-      * **TgUsers.updatedAt**
-      * - `timestamptz` in database
-      * - `NOT NULL`, no default
-      */
-    updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
-    }
-    export type UniqueIndex = 'TgUsers_pkey';
-    export type Column = keyof Selectable;
-    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
-    export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
-    export type SQL = SQLExpression | SQLExpression[];
-  }
-
   /* --- aggregate types --- */
 
   export namespace public {  
-    export type Table = Swines.Table | swines.Table | tg_chats.Table | tg_users.Table | TgChats.Table | TgUsers.Table;
-    export type Selectable = Swines.Selectable | swines.Selectable | tg_chats.Selectable | tg_users.Selectable | TgChats.Selectable | TgUsers.Selectable;
-    export type JSONSelectable = Swines.JSONSelectable | swines.JSONSelectable | tg_chats.JSONSelectable | tg_users.JSONSelectable | TgChats.JSONSelectable | TgUsers.JSONSelectable;
-    export type Whereable = Swines.Whereable | swines.Whereable | tg_chats.Whereable | tg_users.Whereable | TgChats.Whereable | TgUsers.Whereable;
-    export type Insertable = Swines.Insertable | swines.Insertable | tg_chats.Insertable | tg_users.Insertable | TgChats.Insertable | TgUsers.Insertable;
-    export type Updatable = Swines.Updatable | swines.Updatable | tg_chats.Updatable | tg_users.Updatable | TgChats.Updatable | TgUsers.Updatable;
-    export type UniqueIndex = Swines.UniqueIndex | swines.UniqueIndex | tg_chats.UniqueIndex | tg_users.UniqueIndex | TgChats.UniqueIndex | TgUsers.UniqueIndex;
-    export type Column = Swines.Column | swines.Column | tg_chats.Column | tg_users.Column | TgChats.Column | TgUsers.Column;
+    export type Table = swines.Table | tg_chats.Table | tg_users.Table;
+    export type Selectable = swines.Selectable | tg_chats.Selectable | tg_users.Selectable;
+    export type JSONSelectable = swines.JSONSelectable | tg_chats.JSONSelectable | tg_users.JSONSelectable;
+    export type Whereable = swines.Whereable | tg_chats.Whereable | tg_users.Whereable;
+    export type Insertable = swines.Insertable | tg_chats.Insertable | tg_users.Insertable;
+    export type Updatable = swines.Updatable | tg_chats.Updatable | tg_users.Updatable;
+    export type UniqueIndex = swines.UniqueIndex | tg_chats.UniqueIndex | tg_users.UniqueIndex;
+    export type Column = swines.Column | tg_chats.Column | tg_users.Column;
   
-    export type AllBaseTables = [Swines.Table, swines.Table, tg_chats.Table, tg_users.Table, TgChats.Table, TgUsers.Table];
+    export type AllBaseTables = [swines.Table, tg_chats.Table, tg_users.Table];
     export type AllForeignTables = [];
     export type AllViews = [];
     export type AllMaterializedViews = [];
-    export type AllTablesAndViews = [Swines.Table, swines.Table, tg_chats.Table, tg_users.Table, TgChats.Table, TgUsers.Table];
+    export type AllTablesAndViews = [swines.Table, tg_chats.Table, tg_users.Table];
   }
 
 
@@ -1314,75 +615,51 @@ declare module 'zapatos/schema' {
   /* === lookups === */
 
   export type SelectableForTable<T extends Table> = {
-    "Swines": Swines.Selectable;
     "swines": swines.Selectable;
     "tg_chats": tg_chats.Selectable;
     "tg_users": tg_users.Selectable;
-    "TgChats": TgChats.Selectable;
-    "TgUsers": TgUsers.Selectable;
   }[T];
 
   export type JSONSelectableForTable<T extends Table> = {
-    "Swines": Swines.JSONSelectable;
     "swines": swines.JSONSelectable;
     "tg_chats": tg_chats.JSONSelectable;
     "tg_users": tg_users.JSONSelectable;
-    "TgChats": TgChats.JSONSelectable;
-    "TgUsers": TgUsers.JSONSelectable;
   }[T];
 
   export type WhereableForTable<T extends Table> = {
-    "Swines": Swines.Whereable;
     "swines": swines.Whereable;
     "tg_chats": tg_chats.Whereable;
     "tg_users": tg_users.Whereable;
-    "TgChats": TgChats.Whereable;
-    "TgUsers": TgUsers.Whereable;
   }[T];
 
   export type InsertableForTable<T extends Table> = {
-    "Swines": Swines.Insertable;
     "swines": swines.Insertable;
     "tg_chats": tg_chats.Insertable;
     "tg_users": tg_users.Insertable;
-    "TgChats": TgChats.Insertable;
-    "TgUsers": TgUsers.Insertable;
   }[T];
 
   export type UpdatableForTable<T extends Table> = {
-    "Swines": Swines.Updatable;
     "swines": swines.Updatable;
     "tg_chats": tg_chats.Updatable;
     "tg_users": tg_users.Updatable;
-    "TgChats": TgChats.Updatable;
-    "TgUsers": TgUsers.Updatable;
   }[T];
 
   export type UniqueIndexForTable<T extends Table> = {
-    "Swines": Swines.UniqueIndex;
     "swines": swines.UniqueIndex;
     "tg_chats": tg_chats.UniqueIndex;
     "tg_users": tg_users.UniqueIndex;
-    "TgChats": TgChats.UniqueIndex;
-    "TgUsers": TgUsers.UniqueIndex;
   }[T];
 
   export type ColumnForTable<T extends Table> = {
-    "Swines": Swines.Column;
     "swines": swines.Column;
     "tg_chats": tg_chats.Column;
     "tg_users": tg_users.Column;
-    "TgChats": TgChats.Column;
-    "TgUsers": TgUsers.Column;
   }[T];
 
   export type SQLForTable<T extends Table> = {
-    "Swines": Swines.SQL;
     "swines": swines.SQL;
     "tg_chats": tg_chats.SQL;
     "tg_users": tg_users.SQL;
-    "TgChats": TgChats.SQL;
-    "TgUsers": TgUsers.SQL;
   }[T];
 
 }

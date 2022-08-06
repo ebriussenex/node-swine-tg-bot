@@ -1,65 +1,69 @@
-import {botConfig} from '../const/config';
-import {dbConst} from '../const/const';
-import {Swine} from './model/Swine.model';
+import {botConfig} from '../conf/config';
+import * as db from 'zapatos/db';
+import type * as s from 'zapatos/schema';
+import {pool} from './pool';
+import {MessageMeta} from '../app';
+import {tgUserRepository} from './TgUser.repository';
+import {tgChatRepository} from './TgChat.repository';
+
+const SWINES_TABLE: s.swines.Table = 'swines';
 
 export const swineRepository = Object.freeze({
-  getAll: async (): Promise<Swine[]> => await Swine.findAll(),
-  getByPk: async (ownerId: number, chatId: number): Promise<Swine | null> =>
-    await Swine.findOne({
-      where: {chatId: chatId, ownerId: ownerId},
-    }),
-  getTopSwines: async (chatId: number, n?: number): Promise<Swine[]> =>
-    await Swine.findAll({
-      where: {chatId: chatId},
-      order: [[dbConst.WEIGHT_FIELD, 'DESC']],
-      limit: n ?? dbConst.TOP_AMOUNT,
-    }),
-  createSwine: async (
-      userId: number,
-      chatId: number,
-      name?: string,
-  ): Promise<Swine> =>
-    await Swine.create({
-      ownerId: userId,
-      chatId: chatId,
-      weight: botConfig.SWINE_DEFAULT_WEIGHT,
-      lastTimeFed: getDefaultLastTimeFed(),
-      name: name ?? botConfig.SWINE_DEFAULT_NAME,
-    }),
-  updateSwine: async (swine: Swine): Promise<void> => {
-    await Swine.update(swine, {
-      where: {ownerId: swine.ownerId, chatId: swine.chatId},
+  findSwine: async (userId: number, chatId: number)
+    : Promise<s.swines.JSONSelectable | undefined> =>
+    db.selectOne(
+        SWINES_TABLE, {owner_id: userId, chat_id: chatId},
+    ).run(pool),
+  // TODO: upgrade to JOIN with owners
+  findTopSwines: async (meta: MessageMeta, n?: number)
+    : Promise<[s.swines.Selectable[], s.tg_chats.JSONSelectable]> => {
+    const chat: s.tg_chats.JSONSelectable =
+      await tgChatRepository.createOrUpdateChat(meta);
+    await tgUserRepository.createOrUpdateUser(meta);
+    return [
+      await db.sql<s.swines.SQL, s.swines.Selectable[]>`
+        SELECT * FROM ${SWINES_TABLE} WHERE ${{chat_id: meta.chatId}}
+        ORDER BY ${'weight'} DESC 
+        LIMIT ${db.param(n ?? botConfig.SWINE_TOP_ROWS_DEFAULT)}`.run(pool),
+      chat,
+    ];
+  },
+  findOrCreateSwine: async (meta: MessageMeta, name?: string)
+    : Promise<[s.swines.JSONSelectable, boolean]> =>
+    (
+      swineRepository.findSwine(meta.userId, meta.chatId)
+          .then(async (swine: s.swines.JSONSelectable | undefined) => {
+            if (!swine) {
+              await tgChatRepository.createOrUpdateChat(meta);
+              await tgUserRepository.createOrUpdateUser(meta);
+              return [await swineRepository.upsertSwine({
+                owner_id: meta.userId,
+                chat_id: meta.chatId,
+                name: name ?? botConfig.SWINE_DEFAULT_NAME,
+                weight: botConfig.SWINE_DEFAULT_WEIGHT,
+                last_time_fed: db.toString(dateDayAgo(), 'timestamptz'),
+              }), true];
+            }
+            return [swine, false];
+          })
+    ),
+  upsertSwine: async (swine: s.swines.Insertable)
+  : Promise<s.swines.JSONSelectable> =>
+    db.upsert(SWINES_TABLE, swine, ['owner_id', 'chat_id']).run(pool),
+  deleteByPk: (chatId: number, ownerId: number)
+  : Promise<s.swines.JSONSelectable> => {
+    return db.deletes(
+        SWINES_TABLE, {chat_id: chatId, owner_id: ownerId},
+    ).run(pool).then((deleted) => {
+      if (deleted.length > 1) {
+        throw new Error(
+            'Somehow delted more than 1 swine using primary key',
+        );
+      }
+      return deleted[0];
     });
   },
-  upsertSwine: async (
-      userId: number,
-      chatId: number,
-  ): Promise<[Swine, boolean | null]> =>
-    await Swine.upsert({
-      ownerId: userId,
-      chatId: chatId,
-      weight: botConfig.SWINE_DEFAULT_WEIGHT,
-      lastTimeFed: getDefaultLastTimeFed(),
-    }),
-  getOrCreate: async (
-      userId: number,
-      chatId: number,
-  ): Promise<[Swine, boolean]> =>
-    await Swine.findOrCreate({
-      where: {id: userId},
-      defaults: {
-        name: botConfig.SWINE_DEFAULT_NAME,
-        ownerId: userId,
-        chatId: chatId,
-        weight: botConfig.SWINE_DEFAULT_WEIGHT,
-        lastTimeFed: getDefaultLastTimeFed(),
-      },
-    }),
-  delete: async (userId: number, chatId: number): Promise<number> =>
-    await Swine.destroy({
-      where: {chatId: chatId, ownerId: userId},
-    }),
 });
 
-const getDefaultLastTimeFed = (): Date =>
+export const dateDayAgo = () =>
   new Date(new Date().setDate(new Date().getDate() - 1));
