@@ -12,7 +12,7 @@ export const swineService = Object.freeze({
     if (created) return messages.SWINE_CREATION_MSG(swine.name);
     const ltf: number = db.toDate(swine.last_time_fed)?.getTime();
     let diff = 0;
-    if (ltf < new Date().getTime()) diff = new Date().getTime() - ltf;
+    if (ltf < new Date().getTime()) diff = ltf - new Date().getTime();
     return messages.SWINE_INFO_MSG(
         swine.name,
         swine.weight,
@@ -57,9 +57,15 @@ export const swineService = Object.freeze({
       return messages.TOO_LARGE_NAME_MSG;
     }
     if (name.length === 0) return messages.SPECIFY_NAME;
-    forbiddenSymbols.some((s) => {
-      if (name.includes(s)) return messages.FORBIDDEN_NAME_CHAR_MSG(s);
-    });
+    let forbiddenChar = '';
+    if (forbiddenSymbols.some(
+        (s) => {
+          forbiddenChar = s;
+          return name.includes(s);
+        },
+    )) {
+      return messages.FORBIDDEN_NAME_CHAR_MSG(forbiddenChar);
+    }
     const [swine, created]: [s.swines.JSONSelectable, boolean] =
       await swineRepository.findOrCreateSwine(meta, name);
     if (created) return messages.SWINE_CREATION_MSG(swine.name);

@@ -14,16 +14,16 @@ const start = async () => {
         (0, config_zapatos_1.conifgZapatos)();
         const bot = new telegraf_1.Telegraf(config_1.botConfig.BOT_TOKEN);
         bot.command(const_1.commands.FEED, async (ctx) => {
-            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.feed(meta(ctx.message)));
+            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.feed(meta(ctx.message)), { parse_mode: 'Markdown' });
         });
         bot.command(const_1.commands.NAME, async (ctx) => {
-            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.rename(meta(ctx.message), ctx.message.text.slice(const_1.commands.NAME.length + 2)));
+            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.rename(meta(ctx.message), ctx.message.text.slice(const_1.commands.NAME.length + 2)), { parse_mode: 'Markdown' });
         });
         bot.command(const_1.commands.TOP, async (ctx) => {
-            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.getTop(meta(ctx.message)));
+            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.getTop(meta(ctx.message)), { parse_mode: 'Markdown' });
         });
         bot.command(const_1.commands.MY_SWINE, async (ctx) => {
-            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.get(meta(ctx.message)));
+            await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.get(meta(ctx.message)), { parse_mode: 'Markdown' });
         });
         bot.command(const_1.commands.KILL, async (ctx) => {
             await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.delete(meta(ctx.message)));
@@ -48,9 +48,9 @@ const start = async () => {
             if (msg === '' && reqCommands.length === 1) {
                 msg = const_1.messages.NO_SUCH_COMMAND(reqCommands[0]);
             }
-            await ctx.telegram.sendMessage(ctx.chat.id, msg);
+            await ctx.telegram.sendMessage(ctx.chat.id, msg, { parse_mode: 'Markdown' });
         });
-        bot.command(const_1.commands.INFO, async (ctx) => await ctx.telegram.sendMessage(ctx.chat.id, const_1.messages.BOT_DESCRIPTION_MSG));
+        bot.command(const_1.commands.INFO, async (ctx) => await ctx.telegram.sendMessage(ctx.chat.id, const_1.messages.BOT_DESCRIPTION_MSG, { parse_mode: 'Markdown' }));
         await bot.launch();
         process.once('SIGINT', () => bot.stop('SIGINT'));
         process.once('SIGTERM', () => bot.stop('SIGTERM'));

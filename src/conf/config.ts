@@ -8,7 +8,7 @@ dotenv.config({path: CONFIG_PATH});
 
 export const botConfig = Object.freeze({
   BOT_TOKEN: process.env.BOT_TOKEN as string,
-  SWINE_TOP_ROWS_DEFAULT: 10,
+  SWINE_TOP_ROWS_DEFAULT: 50,
   MAX_NAME_LENGTH: 25,
   SWINE_FEED_TIMEOUT: 24,
   SWINE_DEFAULT_WEIGHT: 5,

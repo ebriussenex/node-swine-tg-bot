@@ -1,4 +1,4 @@
-import {Telegraf} from 'telegraf';
+import {Composer, Telegraf} from 'telegraf';
 import {Message} from 'typegram';
 import {botConfig} from './conf/config';
 import {commands, commandsDescr, messages} from './const/const';
@@ -28,11 +28,11 @@ const start = async (): Promise<void> => {
     }
     conifgZapatos();
     const bot = new Telegraf(botConfig.BOT_TOKEN);
-
     bot.command(commands.FEED, async (ctx) => {
       await ctx.telegram.sendMessage(
           ctx.chat.id,
           await swineService.feed(meta(ctx.message)),
+          {parse_mode: 'Markdown'},
       );
     });
     bot.command(commands.NAME, async (ctx) => {
@@ -42,18 +42,21 @@ const start = async (): Promise<void> => {
               meta(ctx.message),
               ctx.message.text.slice(commands.NAME.length + 2),
           ),
+          {parse_mode: 'Markdown'},
       );
     });
     bot.command(commands.TOP, async (ctx) => {
       await ctx.telegram.sendMessage(
           ctx.chat.id,
           await swineService.getTop(meta(ctx.message)),
+          {parse_mode: 'Markdown'},
       );
     });
     bot.command(commands.MY_SWINE, async (ctx) => {
       await ctx.telegram.sendMessage(
           ctx.chat.id,
           await swineService.get(meta(ctx.message)),
+          {parse_mode: 'Markdown'},
       );
     });
     bot.command(commands.KILL, async (ctx) => {
@@ -88,13 +91,17 @@ const start = async (): Promise<void> => {
       if (msg === '' && reqCommands.length === 1) {
         msg = messages.NO_SUCH_COMMAND(reqCommands[0]);
       }
-      await ctx.telegram.sendMessage(ctx.chat.id, msg);
+      await ctx.telegram.sendMessage(
+          ctx.chat.id, msg, {parse_mode: 'Markdown'},
+      );
     });
     bot.command(
         commands.INFO,
         async (ctx) =>
           await ctx.telegram.sendMessage(
-              ctx.chat.id, messages.BOT_DESCRIPTION_MSG,
+              ctx.chat.id,
+              messages.BOT_DESCRIPTION_MSG,
+              {parse_mode: 'Markdown'},
           ),
     );
     await bot.launch();
