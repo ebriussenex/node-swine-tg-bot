@@ -1,9 +1,9 @@
 import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
-import {MessageMeta} from '../app';
+import {MessageMeta} from '../bot/swine.handlers';
 import {botConfig} from '../conf/config';
 import {forbiddenSymbols, messages} from '../const/const';
-import {dateDayAgo, swineRepository} from '../repository/Swine.repository';
+import {dateDayAgo, swineRepository} from '../repository/swine.repository';
 
 export const swineService = Object.freeze({
   get: async (meta: MessageMeta): Promise<string> => {
@@ -39,6 +39,8 @@ export const swineService = Object.freeze({
           swine.name,
           weightChange,
           swine.weight,
+          meta.userFirstName,
+          meta.userId,
       );
     }
     ltf.setDate(ltf.getDate() + 1);

@@ -1,7 +1,7 @@
 import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
 import {pool} from './pool';
-import {MessageMeta} from '../app';
+import {MessageMeta} from '../bot/swine.handlers';
 
 const TG_CHATS_TABLE: s.tg_chats.Table = 'tg_chats';
 

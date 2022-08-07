@@ -1,36 +1,32 @@
---- 
-env: 
+---
+env:
   browser: true
   commonjs: true
   es2021: true
   node: true
-extends: 
+extends:
   - google
-overrides: 
-  - 
-    extends: 
+overrides:
+  - extends:
       - "plugin:@typescript-eslint/recommended"
       - "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    files: 
+    files:
       - "*.ts"
       - "*.tsx"
-    parserOptions: 
-      project: 
+    parserOptions:
+      project:
         - ./tsconfig.json
 parser: "@typescript-eslint/parser"
-parserOptions: 
+parserOptions:
   ecmaVersion: latest
-plugins: 
+plugins:
   - "@typescript-eslint"
-rules: 
-  ? "@typescript-eslint/await-thenable"
-  : 2
-  ? "@typescript-eslint/no-floating-promises"
-  : 2
-  new-cap: 
+rules:
+  "@typescript-eslint/await-thenable": 2
+  "@typescript-eslint/no-floating-promises": 2
+  new-cap:
     - 0
-    - 
-      capIsNewExceptions: 
+    - capIsNewExceptions:
         - ForeignKey
         - HasMany
         - Length
@@ -38,3 +34,7 @@ rules:
         - HasOne
         - Column
   require-jsdoc: 0
+  max-len:
+    - 2
+    - 120
+    - 2

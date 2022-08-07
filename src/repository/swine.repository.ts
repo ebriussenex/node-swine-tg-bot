@@ -2,9 +2,9 @@ import {botConfig} from '../conf/config';
 import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
 import {pool} from './pool';
-import {MessageMeta} from '../app';
-import {tgUserRepository} from './TgUser.repository';
-import {tgChatRepository} from './TgChat.repository';
+import {MessageMeta} from '../bot/swine.handlers';
+import {tgUserRepository} from './tg-user.repository';
+import {tgChatRepository} from './tg-chat.repository';
 
 const SWINES_TABLE: s.swines.Table = 'swines';
 
