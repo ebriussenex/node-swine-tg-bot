@@ -37,16 +37,16 @@ declare module 'zapatos/schema' {
     id: number;
       /**
       * **swines.owner_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    owner_id: number;
+    owner_id: string;
       /**
       * **swines.chat_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    chat_id: number;
+    chat_id: string;
       /**
       * **swines.name**
       * - `text` in database
@@ -75,16 +75,16 @@ declare module 'zapatos/schema' {
     id: number;
       /**
       * **swines.owner_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    owner_id: number;
+    owner_id: string;
       /**
       * **swines.chat_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    chat_id: number;
+    chat_id: string;
       /**
       * **swines.name**
       * - `text` in database
@@ -113,16 +113,16 @@ declare module 'zapatos/schema' {
     id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
       /**
       * **swines.owner_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    owner_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+    owner_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
       * **swines.chat_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    chat_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+    chat_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
       * **swines.name**
       * - `text` in database
@@ -151,16 +151,16 @@ declare module 'zapatos/schema' {
     id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
       /**
       * **swines.owner_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    owner_id: number | db.Parameter<number> | db.SQLFragment;
+    owner_id: string | db.Parameter<string> | db.SQLFragment;
       /**
       * **swines.chat_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    chat_id: number | db.Parameter<number> | db.SQLFragment;
+    chat_id: string | db.Parameter<string> | db.SQLFragment;
       /**
       * **swines.name**
       * - `text` in database
@@ -189,16 +189,16 @@ declare module 'zapatos/schema' {
     id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
       /**
       * **swines.owner_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    owner_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+    owner_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **swines.chat_id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    chat_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+    chat_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **swines.name**
       * - `text` in database
@@ -234,10 +234,10 @@ declare module 'zapatos/schema' {
     export interface Selectable {
       /**
       * **tg_chats.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id: number;
+    id: string;
       /**
       * **tg_chats.chat_type**
       * - `text` in database
@@ -266,10 +266,10 @@ declare module 'zapatos/schema' {
     export interface JSONSelectable {
       /**
       * **tg_chats.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id: number;
+    id: string;
       /**
       * **tg_chats.chat_type**
       * - `text` in database
@@ -298,10 +298,10 @@ declare module 'zapatos/schema' {
     export interface Whereable {
       /**
       * **tg_chats.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+    id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
       * **tg_chats.chat_type**
       * - `text` in database
@@ -330,10 +330,10 @@ declare module 'zapatos/schema' {
     export interface Insertable {
       /**
       * **tg_chats.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id: number | db.Parameter<number> | db.SQLFragment;
+    id: string | db.Parameter<string> | db.SQLFragment;
       /**
       * **tg_chats.chat_type**
       * - `text` in database
@@ -362,10 +362,10 @@ declare module 'zapatos/schema' {
     export interface Updatable {
       /**
       * **tg_chats.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+    id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **tg_chats.chat_type**
       * - `text` in database
@@ -407,10 +407,10 @@ declare module 'zapatos/schema' {
     export interface Selectable {
       /**
       * **tg_users.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id: number;
+    id: string;
       /**
       * **tg_users.is_bot**
       * - `bool` in database
@@ -439,10 +439,10 @@ declare module 'zapatos/schema' {
     export interface JSONSelectable {
       /**
       * **tg_users.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id: number;
+    id: string;
       /**
       * **tg_users.is_bot**
       * - `bool` in database
@@ -471,10 +471,10 @@ declare module 'zapatos/schema' {
     export interface Whereable {
       /**
       * **tg_users.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+    id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
       * **tg_users.is_bot**
       * - `bool` in database
@@ -503,10 +503,10 @@ declare module 'zapatos/schema' {
     export interface Insertable {
       /**
       * **tg_users.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id: number | db.Parameter<number> | db.SQLFragment;
+    id: string | db.Parameter<string> | db.SQLFragment;
       /**
       * **tg_users.is_bot**
       * - `bool` in database
@@ -535,10 +535,10 @@ declare module 'zapatos/schema' {
     export interface Updatable {
       /**
       * **tg_users.id**
-      * - `int4` in database
+      * - `text` in database
       * - `NOT NULL`, no default
       */
-    id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+    id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **tg_users.is_bot**
       * - `bool` in database

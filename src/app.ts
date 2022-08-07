@@ -1,13 +1,17 @@
-import {Composer, Telegraf} from 'telegraf';
+import express from 'express';
+import {Telegraf} from 'telegraf';
 import {Message} from 'typegram';
 import {botConfig} from './conf/config';
 import {commands, commandsDescr, messages} from './const/const';
-import {conifgZapatos} from './scripts/config-zapatos';
+import {getTunnel} from './scripts/localtunnel';
 import {swineService} from './service/Swine.service';
+import dotenv from 'dotenv';
+import {migrateDb} from './scripts/migrate-db';
+import {configZapatos} from './conf/zapatos.config';
 
 export type MessageMeta = {
-  chatId: number;
-  userId: number;
+  chatId: string;
+  userId: string;
   userIsBot: boolean;
   chatType: string;
   userFirstName: string;
@@ -20,14 +24,37 @@ export type MessageMeta = {
 console.log(`Your tg bot token is ${botConfig.BOT_TOKEN}`);
 
 const start = async (): Promise<void> => {
+  const CONFIG_PATH = `.${process.env.NODE_ENV as string}.env`;
+  dotenv.config({path: CONFIG_PATH});
+  console.log(`Using env: ${process.env.NODE_ENV as string}`);
   try {
     if (botConfig.BOT_TOKEN === undefined) {
       throw new Error(
           'Bot token is not present in .env file or in env variable',
       );
     }
-    conifgZapatos();
+    // migrateDb();
+    await configZapatos();
     const bot = new Telegraf(botConfig.BOT_TOKEN);
+    let url = `${process.env.HOST as string}`;
+    if (process.env.NODE_ENV === 'dev') {
+      url = await getTunnel();
+    }
+    const secretPath = `/telegraf/${bot.secretPathComponent()}`;
+
+    console.log(await bot.telegram.getWebhookInfo());
+    await bot.telegram.deleteWebhook();
+    await bot.telegram.setWebhook(`${url}${secretPath}`);
+    console.log(await bot.telegram.getWebhookInfo());
+
+    const app = express();
+    app.use(bot.webhookCallback(secretPath));
+
+    app.listen(process.env.PORT, () => {
+      console.log(`app listening on port ${process.env.PORT as string}!`);
+    });
+
+
     bot.command(commands.FEED, async (ctx) => {
       await ctx.telegram.sendMessage(
           ctx.chat.id,
@@ -104,7 +131,6 @@ const start = async (): Promise<void> => {
               {parse_mode: 'Markdown'},
           ),
     );
-    await bot.launch();
 
     process.once('SIGINT', () => bot.stop('SIGINT'));
     process.once('SIGTERM', () => bot.stop('SIGTERM'));
@@ -118,22 +144,31 @@ void start();
 
 function meta(msg: Message): MessageMeta {
   const chatType = msg.chat.type;
-  if (chatType !== 'group' && chatType !== 'private') {
-    throw Error('Bot is supposed to be used only in group or private chat');
+  if (
+    chatType !== 'group' && chatType !== 'private' && chatType !== 'supergroup'
+  ) {
+    throw Error(
+        'Bot is supposed to be used only in group/supergroup or private chat',
+    );
   }
   if (msg.from === undefined) {
     throw Error('Message from channel is not supported');
   }
   return {
-    chatId: msg.chat.id,
-    userId: msg.from.id,
+    chatId: msg.chat.id.toString(),
+    userId: msg.from.id.toString(),
     userIsBot: msg.from.is_bot,
     chatType: msg.chat.type,
     userFirstName: msg.from.first_name,
     userLastName: msg.from.last_name,
     username: msg.from.username,
-    chatFirstName: msg.chat.type === 'group' ? undefined : msg.chat.first_name,
-    chatLastName: msg.chat.type === 'group' ? undefined : msg.chat.last_name,
+    chatFirstName: (
+      msg.chat.type === 'group' || msg.chat.type === 'supergroup'
+      ) ?
+     undefined : msg.chat.first_name,
+    chatLastName: (
+      msg.chat.type === 'group' || msg.chat.type === 'supergroup'
+      ) ? undefined : msg.chat.last_name,
     chatTitle: msg.chat.type === 'private' ? undefined : msg.chat.title,
   };
 }

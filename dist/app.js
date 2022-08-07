@@ -1,18 +1,41 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
 const telegraf_1 = require("telegraf");
 const config_1 = require("./conf/config");
 const const_1 = require("./const/const");
-const config_zapatos_1 = require("./scripts/config-zapatos");
 const Swine_service_1 = require("./service/Swine.service");
+const dotenv_1 = __importDefault(require("dotenv"));
+const zapatos_config_1 = require("./conf/zapatos.config");
 console.log(`Your tg bot token is ${config_1.botConfig.BOT_TOKEN}`);
 const start = async () => {
+    const CONFIG_PATH = `.${process.env.NODE_ENV}.env`;
+    dotenv_1.default.config({ path: CONFIG_PATH });
+    console.log(`Using env: ${process.env.NODE_ENV}`);
     try {
         if (config_1.botConfig.BOT_TOKEN === undefined) {
             throw new Error('Bot token is not present in .env file or in env variable');
         }
-        (0, config_zapatos_1.conifgZapatos)();
+        // migrateDb();
+        await (0, zapatos_config_1.configZapatos)();
         const bot = new telegraf_1.Telegraf(config_1.botConfig.BOT_TOKEN);
+        const url = `${process.env.HOST}`;
+        // if (process.env.NODE_ENV === 'dev') {
+        //   url = await getTunnel();
+        // }
+        const secretPath = `/telegraf/${bot.secretPathComponent()}`;
+        console.log(await bot.telegram.getWebhookInfo());
+        await bot.telegram.deleteWebhook();
+        await bot.telegram.setWebhook(`${url}${secretPath}`);
+        console.log(await bot.telegram.getWebhookInfo());
+        const app = (0, express_1.default)();
+        app.use(bot.webhookCallback(secretPath));
+        app.listen(process.env.PORT, () => {
+            console.log(`app listening on port ${process.env.PORT}!`);
+        });
         bot.command(const_1.commands.FEED, async (ctx) => {
             await ctx.telegram.sendMessage(ctx.chat.id, await Swine_service_1.swineService.feed(meta(ctx.message)), { parse_mode: 'Markdown' });
         });
@@ -51,7 +74,6 @@ const start = async () => {
             await ctx.telegram.sendMessage(ctx.chat.id, msg, { parse_mode: 'Markdown' });
         });
         bot.command(const_1.commands.INFO, async (ctx) => await ctx.telegram.sendMessage(ctx.chat.id, const_1.messages.BOT_DESCRIPTION_MSG, { parse_mode: 'Markdown' }));
-        await bot.launch();
         process.once('SIGINT', () => bot.stop('SIGINT'));
         process.once('SIGTERM', () => bot.stop('SIGTERM'));
     }
@@ -63,8 +85,8 @@ const start = async () => {
 void start();
 function meta(msg) {
     const chatType = msg.chat.type;
-    if (chatType !== 'group' && chatType !== 'private') {
-        throw Error('Bot is supposed to be used only in group or private chat');
+    if (chatType !== 'group' && chatType !== 'private' && chatType !== 'supergroup') {
+        throw Error('Bot is supposed to be used only in group/supergroup or private chat');
     }
     if (msg.from === undefined) {
         throw Error('Message from channel is not supported');
@@ -77,8 +99,9 @@ function meta(msg) {
         userFirstName: msg.from.first_name,
         userLastName: msg.from.last_name,
         username: msg.from.username,
-        chatFirstName: msg.chat.type === 'group' ? undefined : msg.chat.first_name,
-        chatLastName: msg.chat.type === 'group' ? undefined : msg.chat.last_name,
+        chatFirstName: (msg.chat.type === 'group' || msg.chat.type === 'supergroup') ?
+            undefined : msg.chat.first_name,
+        chatLastName: (msg.chat.type === 'group' || msg.chat.type === 'supergroup') ? undefined : msg.chat.last_name,
         chatTitle: msg.chat.type === 'private' ? undefined : msg.chat.title,
     };
 }

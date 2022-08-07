@@ -11,15 +11,9 @@ export const botConfig = Object.freeze({
   SWINE_TOP_ROWS_DEFAULT: 50,
   MAX_NAME_LENGTH: 25,
   SWINE_FEED_TIMEOUT: 24,
-  SWINE_DEFAULT_WEIGHT: 5,
+  SWINE_DEFAULT_WEIGHT: 20,
   SWINE_WEIGHT_CHANGE_ABS: 20,
   SWINE_DEFAULT_NAME: 'Swin',
-  WEBHOOK_HOST: '<ip/host where the bot is running>',
-  WEBHOOK_PORT: 8443, // 443, 80, 88 or 8443 (port need to be 'open'),
-  WEBHOOK_LISTEN: '0.0.0.0',
-  WEBHOOK_SSL_CERT: './webhook_cert.pem',
-  WEBHOOK_SSL_PRIV: './webhook_pkey.pem',
-  API_TOKEN: '',
 });
 
 export const dbConfig = Object.freeze({

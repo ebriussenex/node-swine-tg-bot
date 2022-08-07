@@ -5,7 +5,10 @@ type Command = {
   description: string;
 };
 
-export const forbiddenSymbols: string[] = ['`', '$', '{', '}', '/', '#', '@'];
+export const forbiddenSymbols: string[] = [
+  '`', '$', '{', '}', '/', '#', '@', '_', '\'', '\"', '\\', '<', '>', '^', '*',
+  ':', ';', '[', ']', ')', '(', '+', '-', '.', '!',
+];
 
 export const commandsDescr: Command[] = [
   {
@@ -15,7 +18,7 @@ export const commandsDescr: Command[] = [
     `если *<name>* ` +
     `не задан, создает со стандартным именем ` +
     `*${botConfig.SWINE_DEFAULT_NAME}* ` +
-    `и весом *${botConfig.SWINE_DEFAULT_WEIGHT}*.` +
+    `и весом *${botConfig.SWINE_DEFAULT_WEIGHT} кг*. ` +
     `Если свин уже существует переименовывает - */name *<name>, максимальная ` +
     `длина имени: *${botConfig.MAX_NAME_LENGTH}*, имя не может быть пустым. ` +
     `Имя не может содержать символы: *${forbiddenSymbols.join(' ,')}*`},
@@ -71,7 +74,8 @@ export const messages = Object.freeze({
   TOO_LARGE_NAME_MSG:
     `Имя слишком большое! Максимальный размер: *${botConfig.MAX_NAME_LENGTH}*`,
   SWINE_CREATION_MSG: (name: string): string =>
-    `Ого у вас родился свин 🐖! Его зовут: *${name}*`,
+    `Ого у вас родился свин 🐖! Его зовут: *${name}*,` +
+    ` *${botConfig.SWINE_DEFAULT_WEIGHT} кг.*`,
   SWINE_WEIGHT_MSG: (weight: string): string =>
     `Вес вашего поросенка 🐷: *${weight} кг.*`,
   SWINE_RENAME_MSG: (name: string): string =>
@@ -113,16 +117,4 @@ export const messages = Object.freeze({
     `Швайнокарась 🐽 *${name}*, *${weight}* кг, до следующего кормления:` +
     ` *${h} ч. ` +
     `${m} минуты*`,
-});
-
-export const dbConst = Object.freeze({
-  SWINE_TABLE: 'pig',
-  TG_USER_TABLE: 'tg_users',
-  TG_CHAT_TABLE: 'tg_chat',
-  ID_FIELD: 'id',
-  CHAT_ID_FIELD: 'chat_id',
-  NAME_FIELD: 'name',
-  WEIGHT_FIELD: 'weight',
-  LAST_TIME_FED_FIELD: 'last_time_fed',
-  TOP_AMOUNT: 10,
 });

@@ -9,6 +9,7 @@ dist
 *.env
 *.dev
 .DS_Store
+.vscode
 
 # Docker
 Dockerfile

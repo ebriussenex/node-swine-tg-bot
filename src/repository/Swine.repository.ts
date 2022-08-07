@@ -9,7 +9,7 @@ import {tgChatRepository} from './TgChat.repository';
 const SWINES_TABLE: s.swines.Table = 'swines';
 
 export const swineRepository = Object.freeze({
-  findSwine: async (userId: number, chatId: number)
+  findSwine: async (userId: string, chatId: string)
     : Promise<s.swines.JSONSelectable | undefined> =>
     db.selectOne(
         SWINES_TABLE, {owner_id: userId, chat_id: chatId},
@@ -50,7 +50,7 @@ export const swineRepository = Object.freeze({
   upsertSwine: async (swine: s.swines.Insertable)
   : Promise<s.swines.JSONSelectable> =>
     db.upsert(SWINES_TABLE, swine, ['owner_id', 'chat_id']).run(pool),
-  deleteByPk: (chatId: number, ownerId: number)
+  deleteByPk: (chatId: string, ownerId: string)
   : Promise<s.swines.JSONSelectable> => {
     return db.deletes(
         SWINES_TABLE, {chat_id: chatId, owner_id: ownerId},
