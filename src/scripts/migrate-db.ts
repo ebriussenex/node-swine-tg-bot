@@ -12,3 +12,5 @@ export const migrateDb = () => {
   console.log(shell.exec(`. ./${CONFIG_PATH}`));
   console.log(shell.exec(`graphile-migrate migrate`));
 };
+
+void migrateDb();

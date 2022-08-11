@@ -1,9 +1,11 @@
+import {MessageMeta} from '../bot/handlers/swine.handlers';
+import {botConfig} from '../conf/config';
+import {dateDayAgo, swineRepository, swinesJoinOneTgUser} from '../repository/swine.repository';
+
 import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
-import {MessageMeta} from '../bot/swine.handlers';
-import {botConfig} from '../conf/config';
-import {forbiddenSymbols, messages} from '../const/const';
-import {dateDayAgo, swineRepository} from '../repository/swine.repository';
+import {forbiddenSymbols} from '../const/commands';
+import {messages} from '../const/messages';
 
 export const swineService = Object.freeze({
   get: async (meta: MessageMeta): Promise<string> => {
@@ -25,11 +27,12 @@ export const swineService = Object.freeze({
     if (created) return messages.SWINE_CREATION_MSG(swine.name);
     const ltf = db.toDate(swine.last_time_fed);
     if (ltf <= dateDayAgo()) {
+      const chance = (botConfig.WEIGHTCHANGE_BALANCE.find((w) => (swine.weight <= w[0])) ?? [, 0.5])[1];
       let weightChange = Math.floor(
-          (Math.random() - 0.5) * 2 * botConfig.SWINE_WEIGHT_CHANGE_ABS,
+          ((Math.random() - 0.5) * 2 + chance) * botConfig.SWINE_WEIGHT_CHANGE_ABS,
       );
       console.log(weightChange);
-      if (weightChange < 0 && swine.weight < Math.abs(weightChange)) {
+      if (weightChange < 0 && swine.weight <= Math.abs(weightChange)) {
         weightChange = -(swine.weight - 1);
       }
       swine.weight += weightChange;
@@ -39,8 +42,8 @@ export const swineService = Object.freeze({
           swine.name,
           weightChange,
           swine.weight,
-          meta.userFirstName,
-          meta.userId,
+          meta.user.first_name.toString(),
+          meta.user.id.toString(),
       );
     }
     ltf.setDate(ltf.getDate() + 1);
@@ -77,7 +80,7 @@ export const swineService = Object.freeze({
     return messages.SWINE_RENAME_MSG(swine.name);
   },
   getTop: async (meta: MessageMeta, n?: number): Promise<string> => {
-    const [swines, chat]: [s.swines.Selectable[], s.tg_chats.JSONSelectable] =
+    const [swines, chat]: [s.swines.JSONSelectable[], s.tg_chats.JSONSelectable] =
       await swineRepository.findTopSwines(meta, n);
     return messages.TOP_MSG(chat.first_name ?? chat.title ?? '') +
       swines.map(
@@ -86,10 +89,21 @@ export const swineService = Object.freeze({
           ),
       ).join('');
   },
+  getTopWithOwners: async (meta: MessageMeta, n?: number): Promise<string> => {
+    const [swinesAndOwners, chat]: [(swinesJoinOneTgUser)[], s.tg_chats.JSONSelectable] =
+      await swineRepository.findTopSwinesWithOwners(meta, n);
+    return messages.TOP_MSG(chat.first_name ?? chat.title ?? '') +
+      swinesAndOwners.map(
+          (swineAndOwner, index) => messages.TOP_ROW_OWNERS_MSG(
+              index + 1, swineAndOwner.name, swineAndOwner.weight, swineAndOwner.tg_user.first_name,
+          ),
+      ).join('');
+  },
   delete: async (meta: MessageMeta): Promise<string> =>
-    swineRepository.findSwine(meta.userId, meta.chatId).then(async (swine) => {
-      if (!swine) return messages.SWINE_NOT_EXISTS_MSG;
-      await swineRepository.deleteByPk(meta.chatId, meta.userId);
-      return messages.SWINE_DELETE_MSG;
-    }),
+    swineRepository.findSwine(meta.user.id.toString(), meta.chat.id.toString()).then(
+        async (swine) => {
+          if (!swine) return messages.SWINE_NOT_EXISTS_MSG;
+          await swineRepository.deleteByPk(meta.chat.id.toString(), meta.user.id.toString());
+          return messages.SWINE_DELETE_MSG;
+        }),
 });

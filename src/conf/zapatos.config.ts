@@ -10,7 +10,7 @@ const zapCfg: zg.Config = {
     password: dbConfig.DB_PASSWORD,
     port: dbConfig.DB_PORT,
   },
-  outDir: './src',
+  outDir: './src/db',
 };
 export const configZapatos = async (): Promise<void> => (
   await zg.generate(zapCfg)
