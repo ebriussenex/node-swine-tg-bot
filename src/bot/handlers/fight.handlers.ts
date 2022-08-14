@@ -3,11 +3,9 @@ import {botConfig} from '../../conf/config';
 import {BtnAction, buttons} from '../../const/buttons';
 import {commands} from '../../const/commands';
 import {messages} from '../../const/messages';
-import {Swine, swineFromJSONSelectable, insertableFromSwine} from '../../repository/swine';
-import {swineRepository} from '../../repository/swine.repository';
 import {fightService} from '../../service/fight.service';
 import {BotContext} from '../swinebot.context';
-import {MessageMeta, meta} from './swine.handlers';
+import {meta} from './swine.handlers';
 
 export function addFightHandlers(bot: Telegraf) : void {
   bot.command(commands.FIGHT, async (ctx) => {
@@ -37,7 +35,9 @@ export function addFightHandlers(bot: Telegraf) : void {
     } else if (cmeta.user.id.toString() === BotContext.session.chatIdSwine[chatId].owner_id) {
       return ctx.replyWithMarkdown(messages.SELF_FIGHT_MSG);
     } else {
-      return ctx.replyWithMarkdown(await fightService.acceptFight(cmeta));
+      await ctx.replyWithMarkdown(messages.ACCEPT_FIGHT_MSG(cmeta.user.first_name, cmeta.user.id.toString()));
+      const msg = await fightService.acceptFight(cmeta);
+      return ctx.replyWithMarkdown(msg);
     }
   });
 }

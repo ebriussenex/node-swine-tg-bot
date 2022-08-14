@@ -52,6 +52,9 @@ const start = async (): Promise<void> => {
 
 
     bot.use(noChannelAllowed);
+    if (process.env.NODE_ENV === 'dev') {
+      bot.use(Telegraf.log());
+    }
     addSwineHandlers(bot);
     addFightHandlers(bot);
     addInfoHandlers(bot);

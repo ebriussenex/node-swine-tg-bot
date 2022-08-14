@@ -3,8 +3,10 @@ import {BotContext} from '../bot/swinebot.context';
 import {messages} from '../const/messages';
 import {swineRepository} from '../repository/swine.repository';
 import type * as s from 'zapatos/schema';
+import * as db from 'zapatos/db';
 import * as _ from 'lodash';
 import {botConfig} from '../conf/config';
+import {add} from 'date-fns';
 
 
 type ResultType = 'lw' | 'rw' | 'dr';
@@ -19,7 +21,21 @@ type FightResult = {
 export const fightService = Object.freeze({
   startFight: async (meta: MessageMeta): Promise<[string, boolean]> => {
     const swine = await swineRepository.findSwine(meta.user.id.toString(), meta.chat.id.toString());
-    if (!swine) return [messages.SWINE_NOT_EXISTS_MSG, false];
+    if (!swine) return [messages.SWINE_NOT_EXISTS_MSG(meta.user.first_name, meta.user.id.toString()), false];
+    const ltf = db.toDate(swine.last_time_fought);
+    if (ltf > add(new Date(), {hours: -botConfig.SWINE_FIGHT_TIMEOUT})) {
+      const diff = new Date(
+          add(ltf, {hours: botConfig.SWINE_FIGHT_TIMEOUT}).getTime() - new Date().getTime(),
+      );
+      return [messages.FIGHT_TIMEOUT_MSG(
+          meta.user.first_name, meta.user.id.toString(), diff.getUTCHours(), diff.getUTCMinutes(),
+      ), false];
+    }
+    if (swine.weight < botConfig.MIN_FIGHT_WEIGHT) {
+      return [messages.NOT_ENOUGH_WEIGHT_TO_FIGHT_MSG(
+          meta.user.first_name, meta.user.id.toString(), swine.weight, swine.name,
+      ), false];
+    }
     BotContext.session ??= {chatIdSwine: {}};
     BotContext.session.chatIdSwine[meta.chat.id] = swine;
     return [
@@ -32,15 +48,28 @@ export const fightService = Object.freeze({
     if (BotContext.session === undefined) throw Error('Session undefined, shouldn\'t happen ever in accceptFight');
     const swine = await swineRepository.findSwine(meta.user.id.toString(), meta.chat.id.toString());
 
-    if (!swine) return messages.SWINE_NOT_EXISTS_MSG;
-    else {
-      const fr = battle(BotContext.session.chatIdSwine[meta.chat.id], swine);
-      await swineRepository.upsertSwines([fr.lhs, fr.rhs]);
-      delete BotContext.session.chatIdSwine[meta.chat.id];
-      if (fr.result === 'rw') [fr.lhs, fr.rhs] = [fr.rhs, fr.lhs];
-      return (fr.result === 'dr' ? messages.DRAW_MSG :
-            messages.FIGHT_RES_MSG(fr.lhs.name, fr.rhs.name, fr.wc));
+    if (!swine) return messages.SWINE_NOT_EXISTS_MSG(meta.user.first_name, meta.user.id.toString());
+    const ltf = db.toDate(swine.last_time_fought);
+    const firstWeight = swine.weight;
+    if (ltf > add(new Date(), {hours: -botConfig.SWINE_FIGHT_TIMEOUT})) {
+      const diff = new Date(
+          add(ltf, {hours: botConfig.SWINE_FIGHT_TIMEOUT}).getTime() - new Date().getTime(),
+      );
+      return messages.FIGHT_TIMEOUT_MSG(
+          meta.user.first_name, meta.user.id.toString(), diff.getUTCHours(), diff.getUTCMinutes(),
+      );
     }
+    if (swine.weight < botConfig.MIN_FIGHT_WEIGHT) {
+      return messages.NOT_ENOUGH_WEIGHT_TO_FIGHT_MSG(
+          meta.user.first_name, meta.user.id.toString(), swine.weight, swine.name,
+      );
+    }
+    const fr = battle(BotContext.session.chatIdSwine[meta.chat.id], swine);
+    await swineRepository.upsertSwines([fr.lhs, fr.rhs]);
+    delete BotContext.session.chatIdSwine[meta.chat.id];
+    if (fr.result === 'rw') [fr.lhs, fr.rhs] = [fr.rhs, fr.lhs];
+    return (fr.result === 'dr' ? messages.DRAW_MSG(swine.name, swine.weight) :
+            messages.FIGHT_RES_MSG(swine.name, firstWeight, fr.lhs.name, fr.rhs.name, fr.wc));
   },
 });
 
@@ -56,12 +85,27 @@ function battle(lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable): Fig
     changeWeightsLW(lhs, rhs, weightChange) :
     res === 'rw' ?
       changeWeightsLW(rhs, lhs, weightChange) :
-      weightChange = 0;
+        changeWeightsLW(rhs, lhs, 0);
+  lhs.last_time_fought = db.toString(new Date(), 'timestamptz');
+  rhs.last_time_fought = db.toString(new Date(), 'timestamptz');
   return {lhs: lhs, rhs: rhs, result: res, wc: weightChange};
 }
 
+const addDraw = (lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable):
+void => {
+  lhs.draw++;
+  rhs.draw++;
+};
+
 const changeWeightsLW = (lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable, wc: number):
   void => {
-  lhs.weight += wc;// TODO: last time fought
-  rhs.weight -= wc;
+  if (wc === 0) {
+    lhs.draw++;
+    rhs.draw++;
+  } else {
+    lhs.weight += wc;
+    rhs.weight -= wc;
+    lhs.win++;
+    rhs.loss++;
+  }
 };

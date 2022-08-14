@@ -5,6 +5,7 @@ import {pool} from './pool';
 import {MessageMeta} from '../bot/handlers/swine.handlers';
 import {tgUserRepository} from './tg-user.repository';
 import {tgChatRepository} from './tg-chat.repository';
+import {add} from 'date-fns';
 
 export type swinesJoinOneTgUser = s.swines.JSONSelectable &
   db.LateralResult <{tg_user: db.SQLFragment<s.tg_users.JSONSelectable, never>;}>
@@ -71,7 +72,14 @@ export const swineRepository = Object.freeze({
               chat_id: meta.chat.id.toString(),
               name: name ?? botConfig.SWINE_DEFAULT_NAME,
               weight: botConfig.SWINE_DEFAULT_WEIGHT,
-              last_time_fed: db.toString(dateDayAgo(), 'timestamptz'),
+              last_time_fed: db.toString(
+                  add(new Date(), {hours: -botConfig.SWINE_FEED_TIMEOUT}), 'timestamptz',
+              ),
+              last_time_fought: db.toString(
+                  add(new Date(), {hours: -botConfig.SWINE_FIGHT_TIMEOUT}), 'timestamptz',
+              ),
+              win: 0,
+              loss: 0,
             }), true];
           }
           return [swine, false];
@@ -96,8 +104,5 @@ export const swineRepository = Object.freeze({
   upsertSwines: async (swines: s.swines.Insertable[]) : Promise<s.swines.JSONSelectable[]> =>
     db.upsert(SWINES_TABLE, swines, ['owner_id', 'chat_id']).run(pool),
 });
-
-export const dateDayAgo = () =>
-  new Date(new Date().setDate(new Date().getDate() - 1));
 
 

@@ -43,6 +43,16 @@ export const commandsDescr: Command[] = [
     name: '/info',
     description: '\tИнформация о боте',
   },
+  {
+    name: '/fight',
+    description: `\tСвиньи могут сражаться раз в ${botConfig.SWINE_FIGHT_TIMEOUT}, чтобы начать бой необходимо, ` +
+    'чтобы свин весом был больше ' +
+    `${botConfig.MIN_FIGHT_WEIGHT}. В битве кроме победы однйо из свиней еще и возможна ничья.`,
+  },
+  {
+    name: '/otop',
+    description: 'Топ свиней с именами владельцев',
+  },
 ];
 export const commands = Object.freeze({
   NAME: 'name',
