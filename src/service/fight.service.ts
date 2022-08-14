@@ -91,12 +91,6 @@ function battle(lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable): Fig
   return {lhs: lhs, rhs: rhs, result: res, wc: weightChange};
 }
 
-const addDraw = (lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable):
-void => {
-  lhs.draw++;
-  rhs.draw++;
-};
-
 const changeWeightsLW = (lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable, wc: number):
   void => {
   if (wc === 0) {

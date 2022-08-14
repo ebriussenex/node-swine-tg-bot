@@ -62,7 +62,8 @@ export const messages = Object.freeze({
   SWINE_NOT_EXISTS_MSG: (username: string, userId:string):string =>
     `[${username}](tg://user?id=${userId}), У вас еще нет хряка! Напишите /${commands.NAME} ` +
       `или /${commands.FEED}, чтобы он родился.`,
-  ACCEPTED_INVALID_FIGHT_MSG: 'Вы не можете принять вызов. Бой уже состоялся',
+  ACCEPTED_INVALID_FIGHT_MSG: (username: string, userId:string):string =>
+    `[${username}](tg://user?id=${userId}), Вы не можете принять вызов. Бой уже состоялся`,
   ACCEPTED_INVALID_FIGHT_SESS_MSG: 'Сессия устарела, вы не можете принять бой',
   SELF_FIGHT_MSG: 'Вы не можете принять вызов от самого себя',
   LOSS: 'похудел',

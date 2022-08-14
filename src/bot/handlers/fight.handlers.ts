@@ -31,7 +31,9 @@ export function addFightHandlers(bot: Telegraf) : void {
     else if (
       BotContext.session.chatIdSwine === undefined || BotContext.session.chatIdSwine[chatId] === undefined
     ) {
-      return ctx.replyWithMarkdown(messages.ACCEPTED_INVALID_FIGHT_MSG);
+      return ctx.replyWithMarkdown(
+          messages.ACCEPTED_INVALID_FIGHT_MSG(cmeta.user.first_name, cmeta.user.id.toString()),
+      );
     } else if (cmeta.user.id.toString() === BotContext.session.chatIdSwine[chatId].owner_id) {
       return ctx.replyWithMarkdown(messages.SELF_FIGHT_MSG);
     } else {
