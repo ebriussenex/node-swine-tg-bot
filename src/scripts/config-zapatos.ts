@@ -6,7 +6,7 @@ export function conifgZapatos() {
 
   console.log(`Configuring zapatos`);
 
-  dotenv.config({path: CONFIG_PATH});
+  dotenv.config({ path: CONFIG_PATH });
 
   console.log(shell.exec(`. ./${CONFIG_PATH}`));
   console.log(shell.exec(`npx zapatos`));

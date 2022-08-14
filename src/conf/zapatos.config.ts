@@ -1,6 +1,5 @@
 import * as zg from 'zapatos/generate';
-import {dbConfig} from './config';
-
+import { dbConfig } from './config';
 
 const zapCfg: zg.Config = {
   db: {
@@ -10,8 +9,6 @@ const zapCfg: zg.Config = {
     password: dbConfig.DB_PASSWORD,
     port: dbConfig.DB_PORT,
   },
-  outDir: './src',
+  outDir: './src/db',
 };
-export const configZapatos = async (): Promise<void> => (
-  await zg.generate(zapCfg)
-);
+export const configZapatos = async (): Promise<void> => await zg.generate(zapCfg);

@@ -1,5 +1,5 @@
 import pg from 'pg';
-import {dbConfig} from '../conf/config';
+import { dbConfig } from '../conf/config';
 
 export const pool = new pg.Pool({
   host: dbConfig.DB_HOST,

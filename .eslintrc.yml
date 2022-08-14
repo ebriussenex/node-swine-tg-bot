@@ -10,6 +10,7 @@ overrides:
   - extends:
       - "plugin:@typescript-eslint/recommended"
       - "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      - prettier
     files:
       - "*.ts"
       - "*.tsx"
@@ -20,8 +21,17 @@ parser: "@typescript-eslint/parser"
 parserOptions:
   ecmaVersion: latest
 plugins:
+#  - unused-imports
   - "@typescript-eslint"
+  - prettier
 rules:
+  quotes:
+    - 2
+    - single
+    - avoid-escape
+  semi:
+    - 2
+    - always
   "@typescript-eslint/await-thenable": 2
   "@typescript-eslint/no-floating-promises": 2
   new-cap:
