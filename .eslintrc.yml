@@ -10,6 +10,7 @@ overrides:
   - extends:
       - "plugin:@typescript-eslint/recommended"
       - "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      - prettier
     files:
       - "*.ts"
       - "*.tsx"
@@ -22,6 +23,7 @@ parserOptions:
 plugins:
 #  - unused-imports
   - "@typescript-eslint"
+  - prettier
 rules:
   quotes:
     - 2

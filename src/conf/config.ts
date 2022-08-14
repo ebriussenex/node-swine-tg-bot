@@ -4,7 +4,7 @@ const CONFIG_PATH = `.${process.env.NODE_ENV as string}.env`;
 
 console.log(`Using config file: ${CONFIG_PATH}`);
 
-dotenv.config({path: CONFIG_PATH});
+dotenv.config({ path: CONFIG_PATH });
 
 export const botConfig = Object.freeze({
   BOT_TOKEN: process.env.BOT_TOKEN as string,

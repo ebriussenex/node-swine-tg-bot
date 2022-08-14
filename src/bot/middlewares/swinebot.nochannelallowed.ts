@@ -1,5 +1,5 @@
-import {Context, Middleware, MiddlewareFn} from 'telegraf';
-import {messages} from '../../const/messages';
+import { Context, Middleware, MiddlewareFn } from 'telegraf';
+import { messages } from '../../const/messages';
 
 export const noChannelAllowed: Middleware<Context> = async (ctx, next) => {
   if (ctx.channelPost || ctx.myChatMember?.chat.type === 'channel') {
