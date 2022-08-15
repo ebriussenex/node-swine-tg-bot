@@ -12,7 +12,6 @@ export const infoService = Object.freeze({
       commandsDescr.map(command => {
         if (reqCommands.includes(command.name) || reqCommands.includes(command.name.slice(1))) {
           msg += `${counter}. ${command.name}\n\t${command.description}\n`;
-
           counter++;
         }
       });

@@ -6,7 +6,7 @@ import type * as s from 'zapatos/schema';
 import * as db from 'zapatos/db';
 import * as _ from 'lodash';
 import { botConfig } from '../conf/config';
-import { add } from 'date-fns';
+import { computeCD } from './cooldown';
 
 type ResultType = 'lw' | 'rw' | 'dr';
 
@@ -19,32 +19,9 @@ type FightResult = {
 
 export const fightService = Object.freeze({
   startFight: async (meta: MessageMeta): Promise<[string, boolean]> => {
-    const swine = await swineRepository.findSwine(meta.user.id.toString(), meta.chat.id.toString());
-    if (!swine) return [messages.SWINE_NOT_EXISTS_MSG(meta.user.first_name, meta.user.id.toString()), false];
-    const ltf = db.toDate(swine.last_time_fought);
-    if (ltf > add(new Date(), { hours: -botConfig.SWINE_FIGHT_TIMEOUT })) {
-      const diff = new Date(add(ltf, { hours: botConfig.SWINE_FIGHT_TIMEOUT }).getTime() - new Date().getTime());
-      return [
-        messages.FIGHT_TIMEOUT_MSG(
-          meta.user.first_name,
-          meta.user.id.toString(),
-          diff.getUTCHours(),
-          diff.getUTCMinutes(),
-        ),
-        false,
-      ];
-    }
-    if (swine.weight < botConfig.MIN_FIGHT_WEIGHT) {
-      return [
-        messages.NOT_ENOUGH_WEIGHT_TO_FIGHT_MSG(
-          meta.user.first_name,
-          meta.user.id.toString(),
-          swine.weight,
-          swine.name,
-        ),
-        false,
-      ];
-    }
+    const swineOrMsg = await isLegitimate(meta);
+    if (typeof swineOrMsg === 'string') return [swineOrMsg, false];
+    const swine = swineOrMsg;
     BotContext.session ??= { chatIdSwine: {} };
     BotContext.session.chatIdSwine[meta.chat.id] = swine;
     return [
@@ -55,37 +32,37 @@ export const fightService = Object.freeze({
 
   acceptFight: async (meta: MessageMeta): Promise<string> => {
     if (BotContext.session === undefined) throw Error("Session undefined, shouldn't happen ever in accceptFight");
-    const swine = await swineRepository.findSwine(meta.user.id.toString(), meta.chat.id.toString());
-
-    if (!swine) return messages.SWINE_NOT_EXISTS_MSG(meta.user.first_name, meta.user.id.toString());
-    const ltf = db.toDate(swine.last_time_fought);
-    const firstWeight = swine.weight;
-    if (ltf > add(new Date(), { hours: -botConfig.SWINE_FIGHT_TIMEOUT })) {
-      const diff = new Date(add(ltf, { hours: botConfig.SWINE_FIGHT_TIMEOUT }).getTime() - new Date().getTime());
-      return messages.FIGHT_TIMEOUT_MSG(
-        meta.user.first_name,
-        meta.user.id.toString(),
-        diff.getUTCHours(),
-        diff.getUTCMinutes(),
-      );
-    }
-    if (swine.weight < botConfig.MIN_FIGHT_WEIGHT) {
-      return messages.NOT_ENOUGH_WEIGHT_TO_FIGHT_MSG(
-        meta.user.first_name,
-        meta.user.id.toString(),
-        swine.weight,
-        swine.name,
-      );
-    }
+    const swineOrMsg = await isLegitimate(meta);
+    if (typeof swineOrMsg === 'string') return swineOrMsg;
+    const swine = swineOrMsg;
+    const initWeight = swine.weight;
     const fr = battle(BotContext.session.chatIdSwine[meta.chat.id], swine);
     await swineRepository.upsertSwines([fr.lhs, fr.rhs]);
     delete BotContext.session.chatIdSwine[meta.chat.id];
     if (fr.result === 'rw') [fr.lhs, fr.rhs] = [fr.rhs, fr.lhs];
     return fr.result === 'dr'
       ? messages.DRAW_MSG(swine.name, swine.weight)
-      : messages.FIGHT_RES_MSG(swine.name, firstWeight, fr.lhs.name, fr.rhs.name, fr.wc);
+      : messages.FIGHT_RES_MSG(swine.name, initWeight, fr.lhs.name, fr.rhs.name, fr.wc);
   },
 });
+
+const isLegitimate = async (meta: MessageMeta): Promise<string | s.swines.JSONSelectable> => {
+  const swine = await swineRepository.findSwine(meta.user.id.toString(), meta.chat.id.toString());
+  if (!swine) return messages.SWINE_NOT_EXISTS_MSG(meta.user.first_name, meta.user.id.toString());
+  const cd = computeCD(db.toDate(swine.last_time_fought), botConfig.SWINE_FIGHT_TIMEOUT);
+  if (cd[0]) {
+    return messages.FIGHT_TIMEOUT_MSG(meta.user.first_name, meta.user.id.toString(), cd[1][0], cd[1][1]);
+  }
+  if (swine.weight < botConfig.MIN_FIGHT_WEIGHT) {
+    return messages.NOT_ENOUGH_WEIGHT_TO_FIGHT_MSG(
+      meta.user.first_name,
+      meta.user.id.toString(),
+      swine.weight,
+      swine.name,
+    );
+  }
+  return swine;
+};
 
 function battle(lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable): FightResult {
   const chance = _.random(0, 4);
