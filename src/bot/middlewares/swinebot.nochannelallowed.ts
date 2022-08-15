@@ -1,4 +1,4 @@
-import { Context, Middleware, MiddlewareFn } from 'telegraf';
+import { Context, Middleware } from 'telegraf';
 import { messages } from '../../const/messages';
 
 export const noChannelAllowed: Middleware<Context> = async (ctx, next) => {

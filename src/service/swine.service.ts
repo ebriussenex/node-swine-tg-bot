@@ -6,6 +6,7 @@ import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
 import { forbiddenSymbols } from '../const/commands';
 import { messages } from '../const/messages';
+import { computeCD } from './cooldown';
 
 export type FightStatisctics = {
   win: number;
@@ -15,47 +16,39 @@ export type FightStatisctics = {
 
 export const swineService = Object.freeze({
   get: async (meta: MessageMeta): Promise<string> => {
-    const [swine, created]: [s.swines.JSONSelectable, boolean] = await swineRepository.findOrCreateSwine(meta);
-    if (created) return messages.SWINE_CREATION_MSG(swine.name);
-    return messages.SWINE_INFO_MSG(
-      swine.name,
-      swine.weight,
-      getHoursMinDiffFromNow(add(db.toDate(swine.last_time_fed), { hours: botConfig.SWINE_FEED_TIMEOUT }).getTime()),
-      getHoursMinDiffFromNow(
-        add(db.toDate(swine.last_time_fought), { hours: botConfig.SWINE_FIGHT_TIMEOUT }).getTime(),
-      ),
-      {
-        win: swine.win,
-        loss: swine.loss,
-        draw: swine.draw,
-      },
-    );
+    const swineOrMsg = await isCreated(meta);
+    if (typeof swineOrMsg === 'string') return swineOrMsg;
+    const cdFeed = computeCD(db.toDate(swineOrMsg.last_time_fed), botConfig.SWINE_FEED_TIMEOUT);
+    const cdFight = computeCD(db.toDate(swineOrMsg.last_time_fought), botConfig.SWINE_FIGHT_TIMEOUT);
+    return messages.SWINE_INFO_MSG(swineOrMsg.name, swineOrMsg.weight, cdFeed[1], cdFight[1], {
+      win: swineOrMsg.win,
+      loss: swineOrMsg.loss,
+      draw: swineOrMsg.draw,
+    });
   },
   feed: async (meta: MessageMeta): Promise<string> => {
-    const [swine, created]: [s.swines.JSONSelectable, boolean] = await swineRepository.findOrCreateSwine(meta);
-    if (created) return messages.SWINE_CREATION_MSG(swine.name);
-    const ltf = db.toDate(swine.last_time_fed);
-    if (ltf <= add(new Date(), { hours: -botConfig.SWINE_FEED_TIMEOUT })) {
-      const chance = (botConfig.WEIGHTCHANGE_BALANCE.find(w => swine.weight <= w[0]) ?? [, 0.5])[1];
-      let weightChange = Math.floor(((Math.random() - 0.5) * 2 + chance) * botConfig.SWINE_WEIGHT_CHANGE_ABS);
-      console.log(weightChange);
-      if (weightChange < 0 && swine.weight <= Math.abs(weightChange)) {
-        weightChange = -(swine.weight - 1);
-      }
-      swine.weight += weightChange;
-      swine.last_time_fed = db.toString(new Date(), 'timestamptz');
-      await swineRepository.upsertSwine(swine);
-      return messages.SWINE_WEIGHT_CHANGE_MSG(
-        swine.name,
-        weightChange,
-        swine.weight,
-        meta.user.first_name.toString(),
-        meta.user.id.toString(),
-      );
+    const swineOrMsg = await isCreated(meta);
+    if (typeof swineOrMsg === 'string') return swineOrMsg;
+    const cd = computeCD(db.toDate(swineOrMsg.last_time_fed), botConfig.SWINE_FEED_TIMEOUT);
+    if (cd[0]) {
+      return messages.SWINE_FEED_TIMEOUT_MSG(cd[1][0], cd[1][1]);
     }
-    add(ltf, { hours: botConfig.SWINE_FEED_TIMEOUT });
-    const diff = new Date(ltf.getTime() - new Date().getTime());
-    return messages.SWINE_FEED_TIMEOUT_MSG(diff.getUTCHours(), diff.getUTCMinutes());
+    const chance = (botConfig.WEIGHTCHANGE_BALANCE.find(w => swineOrMsg.weight <= w[0]) ?? [, 0.5])[1];
+    let weightChange = Math.floor(((Math.random() - 0.5) * 2 + chance) * botConfig.SWINE_WEIGHT_CHANGE_ABS);
+    console.log(weightChange);
+    if (weightChange < 0 && swineOrMsg.weight <= Math.abs(weightChange)) {
+      weightChange = -(swineOrMsg.weight - 1);
+    }
+    swineOrMsg.weight += weightChange;
+    swineOrMsg.last_time_fed = db.toString(new Date(), 'timestamptz');
+    await swineRepository.upsertSwine(swineOrMsg);
+    return messages.SWINE_WEIGHT_CHANGE_MSG(
+      swineOrMsg.name,
+      weightChange,
+      swineOrMsg.weight,
+      meta.user.first_name.toString(),
+      meta.user.id.toString(),
+    );
   },
   rename: async (meta: MessageMeta, name: string): Promise<string> => {
     name = name.trim();
@@ -72,12 +65,13 @@ export const swineService = Object.freeze({
     ) {
       return messages.FORBIDDEN_NAME_CHAR_MSG(forbiddenChar);
     }
-    const [swine, created]: [s.swines.JSONSelectable, boolean] = await swineRepository.findOrCreateSwine(meta, name);
-    if (created) return messages.SWINE_CREATION_MSG(swine.name);
 
-    swine.name = name;
-    await swineRepository.upsertSwine(swine);
-    return messages.SWINE_RENAME_MSG(swine.name);
+    const swineOrMsg = await isCreated(meta);
+    if (typeof swineOrMsg === 'string') return swineOrMsg;
+
+    swineOrMsg.name = name;
+    await swineRepository.upsertSwine(swineOrMsg);
+    return messages.SWINE_RENAME_MSG(swineOrMsg.name);
   },
   getTop: async (meta: MessageMeta, n?: number): Promise<string> => {
     const [swines, chat]: [s.swines.JSONSelectable[], s.tg_chats.JSONSelectable] = await swineRepository.findTopSwines(
@@ -114,8 +108,8 @@ export const swineService = Object.freeze({
     }),
 });
 
-const getHoursMinDiffFromNow = (date: number): [number, number] => {
-  let diff = 0;
-  if (date > new Date().getTime()) diff = date - new Date().getTime();
-  return [new Date(diff).getUTCHours(), new Date(diff).getUTCMinutes()];
+const isCreated = async (meta: MessageMeta): Promise<string | s.swines.JSONSelectable> => {
+  const [swine, created]: [s.swines.JSONSelectable, boolean] = await swineRepository.findOrCreateSwine(meta);
+  if (created) return messages.SWINE_CREATION_MSG(swine.name);
+  return swine;
 };
