@@ -69,6 +69,7 @@ function battle(lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable): Fig
   const res: ResultType = chance === 0 ? 'dr' : chance < 3 ? 'lw' : 'rw';
   let weightChange = Math.floor((Math.random() + 0.2) * Math.min(lhs.weight, rhs.weight) * 0.6);
   weightChange = weightChange > botConfig.MAX_FIGHT_WEIGHT_CHANGE ? botConfig.MAX_FIGHT_WEIGHT_CHANGE : weightChange;
+  weightChange = weightChange === 0 ? 1 : weightChange;
   console.log(weightChange);
   res === 'lw'
     ? changeWeightsLW(lhs, rhs, weightChange)

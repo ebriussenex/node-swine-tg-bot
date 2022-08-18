@@ -1,4 +1,4 @@
-import { commands, commandsDescr } from '../const/commands';
+import { commands, commandsVerboseDescr } from '../const/commands';
 import { messages } from '../const/messages';
 
 export const infoService = Object.freeze({
@@ -6,12 +6,14 @@ export const infoService = Object.freeze({
     const reqCommands: string[] = parseCommandArgs(text, commands.HELP.length);
     let msg = '';
     if (reqCommands.length === 0) {
-      msg = commandsDescr.map((command, index) => `${index + 1}. ${command.name}\n\t${command.description}\n`).join('');
+      msg = commandsVerboseDescr
+        .map((command, index) => `${index + 1}. ${command.command}\n\t${command.description}\n`)
+        .join('');
     } else {
       let counter = 1;
-      commandsDescr.map(command => {
-        if (reqCommands.includes(command.name) || reqCommands.includes(command.name.slice(1))) {
-          msg += `${counter}. ${command.name}\n\t${command.description}\n`;
+      commandsVerboseDescr.map(command => {
+        if (reqCommands.includes(command.command) || reqCommands.includes(command.command.slice(1))) {
+          msg += `${counter}. ${command.command}\n\t${command.description}\n`;
           counter++;
         }
       });
