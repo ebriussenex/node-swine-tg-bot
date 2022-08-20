@@ -89,6 +89,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `0`
       */
     draw: number;
+      /**
+      * **swines.fed_times**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fed_times: number;
+      /**
+      * **swines.to_delete**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+    to_delete: boolean;
     }
     export interface JSONSelectable {
       /**
@@ -151,6 +163,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `0`
       */
     draw: number;
+      /**
+      * **swines.fed_times**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fed_times: number;
+      /**
+      * **swines.to_delete**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+    to_delete: boolean;
     }
     export interface Whereable {
       /**
@@ -213,6 +237,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `0`
       */
     draw?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.fed_times**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fed_times?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.to_delete**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+    to_delete?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -275,6 +311,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `0`
       */
     draw?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.fed_times**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fed_times?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.to_delete**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+    to_delete?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -337,6 +385,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `0`
       */
     draw?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.fed_times**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fed_times?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.to_delete**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+    to_delete?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'swines_pkey';
     export type Column = keyof Selectable;

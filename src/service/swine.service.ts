@@ -39,6 +39,7 @@ export const swineService = Object.freeze({
     }
     swineOrMsg.weight += weightChange;
     swineOrMsg.last_time_fed = db.toString(new Date(), 'timestamptz');
+    swineOrMsg.fed_times++;
     await swineRepository.upsertSwine(swineOrMsg);
     return messages.SWINE_WEIGHT_CHANGE_MSG(
       swineOrMsg.name,
