@@ -19,9 +19,6 @@ type FightResult = {
 
 export const fightService = Object.freeze({
   startFight: async (meta: MessageMeta): Promise<[string, boolean]> => {
-    if (BotContext.session?.chatIdSwine[meta.chat.id] !== null) {
-      return fightService.acceptFight(meta);
-    }
     const swineOrMsg = await isLegitimate(meta);
     if (typeof swineOrMsg === 'string') return [swineOrMsg, false];
     const swine = swineOrMsg;

@@ -1,5 +1,5 @@
 import { commands, commandsVerboseDescr } from '../const/commands';
-import { messages } from '../const/messages';
+import { escapeMdV2, messages } from '../const/messages';
 
 export const infoService = Object.freeze({
   getHelpOnCommands: (text: string): string => {
@@ -7,19 +7,19 @@ export const infoService = Object.freeze({
     let msg = '';
     if (reqCommands.length === 0) {
       msg = commandsVerboseDescr
-        .map((command, index) => `${index + 1}. ${command.command}\n\t${command.description}\n`)
+        .map((command, index) => `${index + 1}\\. ${escapeMdV2(command.command)}\n\t${command.description}\n`)
         .join('');
     } else {
       let counter = 1;
       commandsVerboseDescr.map(command => {
         if (reqCommands.includes(command.command) || reqCommands.includes(command.command.slice(1))) {
-          msg += `${counter}. ${command.command}\n\t${command.description}\n`;
+          msg += `${counter}\\. ${escapeMdV2(command.command)}\n\t${command.description}\n`;
           counter++;
         }
       });
     }
     if (msg === '' && reqCommands.length === 1) {
-      msg = messages.NO_SUCH_COMMAND(reqCommands[0]);
+      msg = messages.NO_SUCH_COMMAND(escapeMdV2(reqCommands[0]));
     }
     return msg;
   },

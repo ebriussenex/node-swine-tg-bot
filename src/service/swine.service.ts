@@ -1,10 +1,8 @@
 import { MessageMeta } from '../bot/handlers/swine.handlers';
 import { botConfig } from '../conf/config';
 import { swineRepository, swinesJoinOneTgUser } from '../repository/swine.repository';
-import { add } from 'date-fns';
 import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
-import { forbiddenSymbols } from '../const/commands';
 import { messages } from '../const/messages';
 import { computeCD } from './cooldown';
 
@@ -56,16 +54,6 @@ export const swineService = Object.freeze({
       return messages.TOO_LARGE_NAME_MSG;
     }
     if (name.length === 0) return messages.SPECIFY_NAME;
-    let forbiddenChar = '';
-    if (
-      forbiddenSymbols.some(s => {
-        forbiddenChar = s;
-        return name.includes(s);
-      })
-    ) {
-      return messages.FORBIDDEN_NAME_CHAR_MSG(forbiddenChar);
-    }
-
     const swineOrMsg = await isCreated(meta);
     if (typeof swineOrMsg === 'string') return swineOrMsg;
 
