@@ -1,6 +1,19 @@
 import { BotCommand } from 'telegraf/typings/core/types/typegram';
 import { botConfig } from '../conf/config';
 
+export const commands = Object.freeze({
+  NAME: 'name',
+  FEED: 'feed',
+  TOP: 'top',
+  HELP: 'help',
+  WEIGHT: 'weight',
+  MY_SWINE: 'swine',
+  KILL: 'kill',
+  INFO: 'info',
+  FIGHT: 'fight',
+  TOP_OWNERS: 'top_owners',
+});
+
 export const forbiddenSymbols: string[] = [
   '`',
   '$',
@@ -74,56 +87,42 @@ export const commandsVerboseDescr: BotCommand[] = [
       `${botConfig.MIN_FIGHT_WEIGHT} кг. В битве кроме победы однйо из свиней еще и возможна ничья.`,
   },
   {
-    command: '/otop',
+    command: '/top_owners',
     description: 'Топ свиней с именами владельцев',
   },
 ];
 
 export const commandsDescr: BotCommand[] = [
   {
-    command: '/name',
+    command: `/${commands.NAME}`,
     description: 'Создать свина с именем или переименовать',
   },
   {
-    command: '/feed',
+    command: `/${commands.FEED}`,
     description: 'Накормить поросенка',
   },
   {
-    command: '/top',
+    command: `/${commands.TOP}`,
     description: 'Топ швайнокарасей',
   },
   {
-    command: '/help',
+    command: `/${commands.HELP}`,
     description: 'Подробное описание команд',
   },
   {
-    command: '/swine',
+    command: `/${commands.MY_SWINE}`,
     description: 'Информация о вашей свинье',
   },
   {
-    command: '/info',
+    command: `/${commands.INFO}`,
     description: 'Информация о боте',
   },
   {
-    command: '/fight',
+    command: `/${commands.FIGHT}`,
     description: 'Вызвать на PVP поединок или принять',
   },
   {
-    command: '/otop',
+    command: `/${commands.TOP_OWNERS}`,
     description: 'Топ свиней с именами владельцев',
   },
 ];
-
-
-export const commands = Object.freeze({
-  NAME: 'name',
-  FEED: 'feed',
-  TOP: 'top',
-  HELP: 'help',
-  WEIGHT: 'weight',
-  MY_SWINE: 'swine',
-  KILL: 'kill',
-  INFO: 'info',
-  FIGHT: 'fight',
-  TOP_OWNERS: 'otop',
-});

@@ -10,20 +10,20 @@ export type MessageMeta = {
 
 export function addSwineHandlers(bot: Telegraf): void {
   bot.command(commands.FEED, async ctx => {
-    await ctx.replyWithMarkdown(await swineService.feed(meta(ctx)));
+    await ctx.replyWithMarkdownV2(await swineService.feed(meta(ctx)));
   });
   bot.command(commands.NAME, async ctx => {
     const name: string = parseCommandArgs(ctx.message.text, commands.NAME.length).join(' ');
-    await ctx.replyWithMarkdown(await swineService.rename(meta(ctx), name));
+    await ctx.replyWithMarkdownV2(await swineService.rename(meta(ctx), name));
   });
   bot.command(commands.TOP, async ctx => {
-    await ctx.replyWithMarkdown(await swineService.getTop(meta(ctx)));
+    await ctx.replyWithMarkdownV2(await swineService.getTop(meta(ctx)));
   });
   bot.command(commands.MY_SWINE, async ctx => {
-    await ctx.replyWithMarkdown(await swineService.get(meta(ctx)));
+    await ctx.replyWithMarkdownV2(await swineService.get(meta(ctx)));
   });
   bot.command(commands.TOP_OWNERS, async ctx => {
-    await ctx.replyWithMarkdown(await swineService.getTopWithOwners(meta(ctx)));
+    await ctx.replyWithMarkdownV2(await swineService.getTopWithOwners(meta(ctx)));
   });
 }
 

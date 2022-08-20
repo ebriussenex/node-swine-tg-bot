@@ -1,12 +1,12 @@
 import { MessageMeta } from '../bot/handlers/swine.handlers';
 import { BotContext } from '../bot/swinebot.context';
-import { messages } from '../const/messages';
 import { swineRepository } from '../repository/swine.repository';
 import type * as s from 'zapatos/schema';
 import * as db from 'zapatos/db';
 import * as _ from 'lodash';
 import { botConfig } from '../conf/config';
 import { computeCD } from './cooldown';
+import { messages } from '../const/messages';
 
 type ResultType = 'lw' | 'rw' | 'dr';
 
@@ -19,21 +19,27 @@ type FightResult = {
 
 export const fightService = Object.freeze({
   startFight: async (meta: MessageMeta): Promise<[string, boolean]> => {
+    if (BotContext.session?.chatIdSwine[meta.chat.id] !== null) {
+      return fightService.acceptFight(meta);
+    }
     const swineOrMsg = await isLegitimate(meta);
     if (typeof swineOrMsg === 'string') return [swineOrMsg, false];
     const swine = swineOrMsg;
-    BotContext.session ??= { chatIdSwine: {} };
+    BotContext.session ??= { chatIdSwine: {}, chatIdUser: {} };
+
     BotContext.session.chatIdSwine[meta.chat.id] = swine;
+    BotContext.session.chatIdUser[meta.chat.id] = meta.user;
+
     return [
       messages.FIGHT_START_MSG(meta.user.first_name.toString(), meta.user.id.toString(), swine.name, swine.weight),
       true,
     ];
   },
 
-  acceptFight: async (meta: MessageMeta): Promise<string> => {
+  acceptFight: async (meta: MessageMeta): Promise<[string, boolean]> => {
     if (BotContext.session === undefined) throw Error("Session undefined, shouldn't happen ever in accceptFight");
     const swineOrMsg = await isLegitimate(meta);
-    if (typeof swineOrMsg === 'string') return swineOrMsg;
+    if (typeof swineOrMsg === 'string') return [swineOrMsg, false];
     const swine = swineOrMsg;
     const initWeight = swine.weight;
     const fr = battle(BotContext.session.chatIdSwine[meta.chat.id], swine);
@@ -41,8 +47,27 @@ export const fightService = Object.freeze({
     delete BotContext.session.chatIdSwine[meta.chat.id];
     if (fr.result === 'rw') [fr.lhs, fr.rhs] = [fr.rhs, fr.lhs];
     return fr.result === 'dr'
-      ? messages.DRAW_MSG(swine.name, swine.weight)
-      : messages.FIGHT_RES_MSG(swine.name, initWeight, fr.lhs.name, fr.rhs.name, fr.wc);
+      ? [
+          messages.DRAW_MSG(
+            BotContext.session.chatIdUser[meta.chat.id].first_name,
+            BotContext.session.chatIdUser[meta.chat.id].id.toString(),
+            swine.name,
+            swine.weight,
+          ),
+          true,
+        ]
+      : [
+          messages.FIGHT_RES_MSG(
+            BotContext.session.chatIdUser[meta.chat.id].first_name,
+            BotContext.session.chatIdUser[meta.chat.id].id.toString(),
+            swine.name,
+            initWeight,
+            fr.lhs.name,
+            fr.rhs.name,
+            fr.wc,
+          ),
+          true,
+        ];
   },
 });
 

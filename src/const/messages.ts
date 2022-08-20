@@ -2,23 +2,49 @@ import { botConfig } from '../conf/config';
 import { FightStatisctics } from '../service/swine.service';
 import { commands, forbiddenSymbols } from './commands';
 
+const usrMentionMdV2 = (username: string, userId: string): string =>
+  `[${escapeMdV2(username)}](tg://user?id=${userId})`;
+
+const escapeMdV2 = (s = ''): string => s.replace(/[_*[\]()~`>#+-=|{}.!]/gi, '\\$&');
+
 export const messages = Object.freeze({
   NOT_ENOUGH_WEIGHT_TO_FIGHT_MSG: (username: string, userId: string, weight: number, swineName: string) =>
-    `[${username}](tg://user?id=${userId}) Ваш ${swineName} 🐖 слишком маленький, ` +
-    `чтобы учавствовать в драках, всего *${weight} кг*. Пусть немного подрастет.\n` +
-    `Необходимая масса для участия: *${botConfig.MIN_FIGHT_WEIGHT} кг.*`,
+    usrMentionMdV2(username, userId) +
+    escapeMdV2(
+      `Ваш ${swineName} 🐖 слишком маленький, ` +
+        `чтобы учавствовать в драках, всего *${weight} кг*. Покормите, чтобы он подрос */feed*.\n` +
+        `Необходимая масса для участия: *${botConfig.MIN_FIGHT_WEIGHT} кг.*`,
+    ),
+
   FIGHT_TIMEOUT_MSG: (username: string, userId: string, h: number, m: number) =>
-    `[${username}](tg://user?id=${userId}) Ваш боров уже дрался за ` +
-    `последние *${botConfig.SWINE_FIGHT_TIMEOUT} ч.*\n` +
-    messages.NEXT_FIGHT_TIME_MSG([h, m]),
-  DRAW_MSG: (name: string, weight: number): string =>
-    `Боец в правом углу: 🐷 *${name}, ${weight} кг.*\n *Ничья*, оба свина сражались достойно!💪`,
-  FIGHT_RES_MSG: (name: string, weight: number, wName: string, lName: string, weightChange: number): string =>
-    `Боец в правом углу: 🐷 *${name}, ${weight} кг.*\n` +
-    `Поросенок *${wName}* не сотавил шанса свину *${lName}*. Отгрыз от него *${weightChange} кг*. сала! ` +
-    'Поздравляем победителя!👏',
+    usrMentionMdV2(username, userId) +
+    escapeMdV2(
+      `Ваш боров уже дрался за ` +
+        `последние *${botConfig.SWINE_FIGHT_TIMEOUT} ч.*\n` +
+        messages.NEXT_FIGHT_TIME_MSG([h, m]),
+    ),
+
+  DRAW_MSG: (username: string, userId: string, name: string, weight: number): string =>
+    usrMentionMdV2(username, userId) +
+    escapeMdV2(`Боец в правом углу: 🐷 *${name}, ${weight} кг.*\n *Ничья*, оба свина сражались достойно!💪`),
+  FIGHT_RES_MSG: (
+    username: string,
+    userId: string,
+    name: string,
+    weight: number,
+    wName: string,
+    lName: string,
+    weightChange: number,
+  ): string =>
+    usrMentionMdV2(username, userId) +
+    escapeMdV2(
+      `Боец в правом углу: 🐷 *${name}, ${weight} кг.*\n` +
+        `Поросенок *${wName}* не сотавил шанса свину *${lName}*. Отгрыз от него *${weightChange} кг*. сала! ` +
+        'Поздравляем победителя!👏',
+    ),
   FIGHT_START_MSG: (username: string, userId: string, name: string, weight: number) =>
-    `[${username}](tg://user?id=${userId}) вызывает на поединок! Боец в левом углу: 🐷 *${name}, ${weight} кг.*`,
+    usrMentionMdV2(username, userId) +
+    escapeMdV2(` вызывает на поединок! Боец в левом углу: 🐷 *${name}, ${weight} кг.*`),
   ACCEPT_FIGHT_MSG: (username: string, userId: string) => `[${username}](tg://user?id=${userId}) принял вызов!`,
   NO_SUCH_COMMAND: (command: string): string => `Нет информации о команде *${command}*`,
   BOT_DESCRIPTION_MSG:
