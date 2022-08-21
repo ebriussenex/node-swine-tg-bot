@@ -5,6 +5,8 @@ import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
 import { messages } from '../const/messages';
 import { computeCD } from './cooldown';
+import { add } from 'date-fns';
+import _ from 'lodash';
 
 export type FightStatisctics = {
   win: number;
@@ -95,6 +97,36 @@ export const swineService = Object.freeze({
       await swineRepository.deleteByPk(meta.chat.id.toString(), meta.user.id.toString());
       return messages.SWINE_DELETE_MSG;
     }),
+  findNotFed: async (): Promise<
+    [Record<string, [swinesJoinOneTgUser, number]>, Record<string, swinesJoinOneTgUser>]
+  > => {
+    const lossWeight: Record<string, [swinesJoinOneTgUser, number]> = {};
+    const toKill: Record<string, swinesJoinOneTgUser> = {};
+    const swines = await swineRepository.findNotFed();
+    if (swines !== undefined && swines.length > 0) {
+      swines.forEach(sw => {
+        if (
+          sw.weight <= 1 ||
+          sw.last_time_fed <
+            db.toString(
+              add(new Date(), { hours: botConfig.SWINE_FEED_TIMEOUT + botConfig.TIME_BEFORE_DEATH }),
+              'timestamptz',
+            )
+        ) {
+          sw.to_delete = true;
+          toKill[sw.chat_id] = sw;
+        } else {
+          let wc = _.random(botConfig.MIN_WEIGHT_LOSS, botConfig.SWINE_WEIGHT_CHANGE_ABS);
+          wc = wc > sw.weight - 1 ? sw.weight - 1 : wc;
+          sw.weight -= wc;
+          lossWeight[sw.chat_id] = [sw, wc];
+        }
+      });
+    }
+    await swineRepository.upsertSwines(Object.values(lossWeight).map(v => v[0]).concat(Object.values(toKill)));
+    return [lossWeight, toKill];
+  },
+  deleteDeadSwines: async(): Promise<s.swines.JSONSelectable[]> => await swineRepository.deleteDead(),
 });
 
 const isCreated = async (meta: MessageMeta): Promise<string | s.swines.JSONSelectable> => {

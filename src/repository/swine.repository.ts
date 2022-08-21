@@ -1,5 +1,6 @@
 import { botConfig } from '../conf/config';
 import * as db from 'zapatos/db';
+import { conditions as dc } from 'zapatos/db';
 import type * as s from 'zapatos/schema';
 import { pool } from './pool';
 import { MessageMeta } from '../bot/handlers/swine.handlers';
@@ -132,4 +133,29 @@ export const swineRepository = Object.freeze({
   },
   upsertSwines: async (swines: s.swines.Insertable[]): Promise<s.swines.JSONSelectable[]> =>
     db.upsert(SWINES_TABLE, swines, ['owner_id', 'chat_id']).run(pool),
+  findNotFed: async (): Promise<swinesJoinOneTgUser[]> =>
+    db
+      .select(
+        SWINES_TABLE,
+        {
+          last_time_fed: dc.before(
+            dc.fromNow(-(botConfig.SWINE_FEED_TIMEOUT + botConfig.TIME_BEFORE_WEIGHT_LOSE), 'hours'),
+          ),
+        },
+        {
+          lateral: {
+            tg_user: db.selectExactlyOne(TG_USERS_TABLE, { id: db.parent('owner_id') }),
+          },
+        },
+      )
+      .run(pool),
+  deleteDead: async (): Promise<s.swines.JSONSelectable[]> =>
+    db
+      .deletes(
+        SWINES_TABLE,
+        {
+          to_delete: true,
+        },
+      )
+      .run(pool),
 });

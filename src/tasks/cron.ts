@@ -1,11 +1,12 @@
 import { CronJob } from 'cron';
+import { botConfig } from '../conf/config';
 
 const markToDeleteJob = new CronJob('0 0/2 * * *', function () {
   const d = new Date();
-  console.log('First:', d);
+  console.log('Mark to delete:', d);
 });
 
-const deleteJob = new CronJob('15 0/2 * * *', function () {
+const deleteJob = new CronJob(`${botConfig.MINUTES_BEFORE_CLEAN} 0/2 * * *`, function () {
   const d = new Date();
-  console.log('First:', d);
+  console.log('Clean job:', d);
 });

@@ -27,9 +27,13 @@ export const botConfig = Object.freeze({
     [50, 0.65],
     [60, 0.6],
     [70, 0.55],
-    [200, 0.5],
+    [200, 0.52],
   ] as [number, number][],
   DRAW_CHANCE: 0.2,
+  TIME_BEFORE_WEIGHT_LOSE: 24,
+  TIME_BEFORE_DEATH: 72,
+  MIN_WEIGHT_LOSS: 11,
+  MINUTES_BEFORE_CLEAN: 15,
 });
 
 export const dbConfig = Object.freeze({

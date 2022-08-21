@@ -105,4 +105,12 @@ export const messages = Object.freeze({
     `Из которых выиграл: *${fightStats.win}*, проиграл: *${fightStats.loss}*\n`,
   FIGHT_ALREADY_STARTED: (username: string, userId: string): string =>
     usrMentionMdV2(username, userId) + ` уже вызывает на битву, вы можете принять его вызов\\!`,
+  SWINE_ABOUT_TO_DIE: (username: string, userId: string, name: string): string => 
+    usrMentionMdV2(username, userId) + `, Ваш свин *${escapeMdV2(name)}* при смерти, если его не покормить, то через` + 
+    ` *${botConfig.MINUTES_BEFORE_CLEAN} мин\\.* он умрет 💀`,
+  SWINE_NOT_FED_LW_MSG: (username: string, userId: string, name: string, wc: number, weight: number): string =>
+    usrMentionMdV2(username, userId) + `, Вы не кормили свою свинью 🐽 ${escapeMdV2(name)} долгое время, он`+ 
+    ` начал худеть и ` + 
+    `потерял ${wc} кг\\. веса\\. Теперь поросенок весит *${weight} кг\\.* Если не кормить свина, он может погибнуть`,
+  SWINES_ABOUT_TO_DIE: 
 });
