@@ -22,7 +22,7 @@ export const messages = Object.freeze({
   FIGHTER_MSG: (username: string, userId: string, name: string, weight: number): string =>
     usrMentionMdV2(username, userId) + `, Боец в правом углу: 🐷 *${escapeMdV2(name)}, ${weight} кг\\.*`,
   DRAW_MSG: (username: string, userId: string, name: string, weight: number): string =>
-    messages.FIGHTER_MSG(username, userId, name, weight) + `*\n *Ничья*, оба свина сражались достойно!💪`,
+    messages.FIGHTER_MSG(username, userId, name, weight) + `\n *Ничья*, оба свина сражались достойно\\!💪`,
   FIGHT_RES_MSG: (
     username: string,
     userId: string,

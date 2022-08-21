@@ -89,7 +89,7 @@ const isLegitimate = async (meta: MessageMeta): Promise<string | s.swines.JSONSe
 function battle(lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelectable): FightResult {
   const chance = _.random(0, 4);
   const res: ResultType = chance === 0 ? 'dr' : chance < 3 ? 'lw' : 'rw';
-  let weightChange = Math.floor((Math.random() + 0.2) * Math.min(lhs.weight, rhs.weight) * 0.6);
+  let weightChange = Math.floor((Math.random() + 0.2) * Math.min(lhs.weight, rhs.weight) * botConfig.MAX_PART_EATEN);
   weightChange = weightChange > botConfig.MAX_FIGHT_WEIGHT_CHANGE ? botConfig.MAX_FIGHT_WEIGHT_CHANGE : weightChange;
   weightChange = weightChange === 0 ? 1 : weightChange;
   console.log(weightChange);

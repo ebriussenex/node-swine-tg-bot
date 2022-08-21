@@ -41,6 +41,32 @@ export const swineRepository = Object.freeze({
       chat,
     ];
   },
+  findTopFightersPoints: async (
+    meta: MessageMeta,
+    n?: number,
+  ): Promise<[s.swines.JSONSelectable[], s.tg_chats.JSONSelectable]> => {
+    const chat: s.tg_chats.JSONSelectable = await tgChatRepository.createOrUpdateChat(meta);
+    await tgUserRepository.createOrUpdateUser(meta);
+    return [
+      await db
+        .select(
+          SWINES_TABLE,
+          { chat_id: meta.chat.id.toString() },
+          {
+            lateral: {
+              users: db.select(TG_USERS_TABLE, { id: db.parent('owner_id') }, { columns: ['first_name', 'id'] }),
+            },
+            order: {
+              by: 'win',
+              direction: 'DESC',
+            },
+            limit: n,
+          },
+        )
+        .run(pool),
+      chat,
+    ];
+  },
 
   findTopSwinesWithOwners: async (
     meta: MessageMeta,

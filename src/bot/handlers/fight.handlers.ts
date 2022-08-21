@@ -17,7 +17,7 @@ export function addFightHandlers(bot: Telegraf): void {
               BotContext.session.chatIdUser[cmeta.chat.id].first_name,
               BotContext.session.chatIdUser[cmeta.chat.id].id.toString(),
             ),
-            Markup.inlineKeyboard([Markup.button.callback(buttons[action], action)])
+            Markup.inlineKeyboard([Markup.button.callback(buttons[action], action)]),
           )
         : ctx.replyWithMarkdownV2(messages.SELF_FIGHT_MSG);
     }

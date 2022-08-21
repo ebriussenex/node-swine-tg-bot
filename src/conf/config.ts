@@ -17,7 +17,8 @@ export const botConfig = Object.freeze({
   SWINE_DEFAULT_NAME: 'Swin',
   MIN_FIGHT_WEIGHT: 5,
   FIGHT_RES_DELAY_MS: 1500,
-  MAX_FIGHT_WEIGHT_CHANGE: 60,
+  MAX_FIGHT_WEIGHT_CHANGE: 80,
+  MAX_PART_EATEN: 0.4,
   WEIGHTCHANGE_BALANCE: [
     [5, 1],
     [10, 0.9],
