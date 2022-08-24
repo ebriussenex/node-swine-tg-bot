@@ -9,6 +9,7 @@ import { noChannelAllowed } from './bot/middlewares/swinebot.nochannelallowed';
 import { addFightHandlers } from './bot/handlers/fight.handlers';
 import { addInfoHandlers } from './bot/handlers/info.handlers';
 import { commandsDescr } from './const/commands';
+import { scheduleTask } from './tasks/cron';
 
 console.log(`Your tg bot token is ${botConfig.BOT_TOKEN}`);
 
@@ -57,7 +58,7 @@ const start = async (): Promise<void> => {
     addSwineHandlers(bot);
     addFightHandlers(bot);
     addInfoHandlers(bot);
-
+    scheduleTask(bot);
     process.once('SIGINT', () => bot.stop('SIGINT'));
     process.once('SIGTERM', () => bot.stop('SIGTERM'));
   } catch (error) {

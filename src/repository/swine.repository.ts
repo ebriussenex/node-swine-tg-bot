@@ -8,7 +8,7 @@ import { tgUserRepository } from './tg-user.repository';
 import { tgChatRepository } from './tg-chat.repository';
 import { add } from 'date-fns';
 
-export type swinesJoinOneTgUser = s.swines.JSONSelectable &
+export type SwinesJoinOneTgUser = s.swines.JSONSelectable &
   db.LateralResult<{ tg_user: db.SQLFragment<s.tg_users.JSONSelectable, never> }>;
 const SWINES_TABLE: s.swines.Table = 'swines';
 const TG_USERS_TABLE: s.tg_users.Table = 'tg_users';
@@ -72,7 +72,7 @@ export const swineRepository = Object.freeze({
   findTopSwinesWithOwners: async (
     meta: MessageMeta,
     n?: number,
-  ): Promise<[swinesJoinOneTgUser[], s.tg_chats.JSONSelectable]> => {
+  ): Promise<[SwinesJoinOneTgUser[], s.tg_chats.JSONSelectable]> => {
     const chat: s.tg_chats.JSONSelectable = await tgChatRepository.createOrUpdateChat(meta);
     await tgUserRepository.createOrUpdateUser(meta);
     return [
@@ -133,7 +133,7 @@ export const swineRepository = Object.freeze({
   },
   upsertSwines: async (swines: s.swines.Insertable[]): Promise<s.swines.JSONSelectable[]> =>
     db.upsert(SWINES_TABLE, swines, ['owner_id', 'chat_id']).run(pool),
-  findNotFed: async (): Promise<swinesJoinOneTgUser[]> =>
+  findNotFed: async (): Promise<SwinesJoinOneTgUser[]> =>
     db
       .select(
         SWINES_TABLE,
@@ -151,11 +151,8 @@ export const swineRepository = Object.freeze({
       .run(pool),
   deleteDead: async (): Promise<s.swines.JSONSelectable[]> =>
     db
-      .deletes(
-        SWINES_TABLE,
-        {
-          to_delete: true,
-        },
-      )
+      .deletes(SWINES_TABLE, {
+        to_delete: true,
+      })
       .run(pool),
 });
