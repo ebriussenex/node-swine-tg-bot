@@ -156,3 +156,18 @@ export const swineRepository = Object.freeze({
       })
       .run(pool),
 });
+
+export const swineInsertableFromSwinesJoinOneTgUser = (swine: s.swines.JSONSelectable): s.swines.JSONSelectable => ({
+  id: swine.id,
+  owner_id: swine.owner_id,
+  chat_id: swine.chat_id,
+  name: swine.name,
+  weight: swine.weight,
+  last_time_fed: swine.last_time_fed,
+  last_time_fought: swine.last_time_fought,
+  win: swine.win,
+  loss: swine.loss,
+  draw: swine.draw,
+  fed_times: swine.fed_times,
+  to_delete: swine.to_delete,
+});

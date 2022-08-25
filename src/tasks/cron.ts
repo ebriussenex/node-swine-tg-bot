@@ -11,7 +11,7 @@ export const scheduleTask = (bot: Telegraf<Context>): void => {
     '45 * * * * *',
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     async () => {
-       console.log('sched');
+      console.log('sched');
       const [lossWeight, toKill]: [
         Record<string, [SwinesJoinOneTgUser, number][]>,
         Record<string, SwinesJoinOneTgUser[]>,
@@ -34,6 +34,19 @@ export const scheduleTask = (bot: Telegraf<Context>): void => {
       }
     },
   );
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  cron.schedule('45 * * * * *', async () => {
+    await bot.telegram.sendMessage(-715518225, 'CHECK1', { parse_mode: 'MarkdownV2' });
+    const [lossWeight, toKill]: [
+      Record<string, [SwinesJoinOneTgUser, number][]>,
+      Record<string, SwinesJoinOneTgUser[]>,
+    ] = await swineService.findNotFed();
+    await bot.telegram.sendMessage(
+      -715518225,
+      `Aquired swines: ` + `${swineOwnersLwFromSwine(lossWeight[-715518225][0]).toString()}`,
+      { parse_mode: 'MarkdownV2' },
+    );
+  });
 };
 
 const swineOwnersLwFromSwine = (swine: [SwinesJoinOneTgUser, number]): SwinesOwnersLW => ({

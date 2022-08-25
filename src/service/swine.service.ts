@@ -1,6 +1,12 @@
+'use strict';
+
 import { MessageMeta } from '../bot/handlers/swine.handlers';
 import { botConfig } from '../conf/config';
-import { swineRepository, SwinesJoinOneTgUser } from '../repository/swine.repository';
+import {
+  swineInsertableFromSwinesJoinOneTgUser,
+  swineRepository,
+  SwinesJoinOneTgUser,
+} from '../repository/swine.repository';
 import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
 import { messages } from '../const/messages';
@@ -104,8 +110,7 @@ export const swineService = Object.freeze({
     const toKill: Record<string, SwinesJoinOneTgUser[]> = {};
     const swines = await swineRepository.findNotFed();
     if (swines !== undefined && swines.length > 0) {
-
-      for(const sw of swines) {// FIXME: forEach stops on 1st
+      for (const sw of swines) {
         if (
           sw.weight <= 1 ||
           sw.last_time_fed <
@@ -115,17 +120,23 @@ export const swineService = Object.freeze({
             )
         ) {
           sw.to_delete = true;
+          if (!toKill.hasOwnProperty(sw.chat_id)) {
+            toKill[sw.chat_id] = [];
+          }
           toKill[sw.chat_id].push(sw);
         } else {
           let wc = _.random(botConfig.MIN_WEIGHT_LOSS, botConfig.SWINE_WEIGHT_CHANGE_ABS);
           wc = wc > sw.weight - 1 ? sw.weight - 1 : wc;
           sw.weight -= wc;
+
+          if (!lossWeight.hasOwnProperty(sw.chat_id)) {
+            lossWeight[sw.chat_id] = [];
+          }
           lossWeight[sw.chat_id].push([sw, wc]);
         }
-      };
+      }
     }
-    console.log('A BUUUG??');// TODO: delete me
-    await swineRepository.upsertSwines(swines);
+    await swineRepository.upsertSwines(swines.map(s => swineInsertableFromSwinesJoinOneTgUser(s)));
     return [lossWeight, toKill];
   },
   deleteDeadSwines: async (): Promise<s.swines.JSONSelectable[]> => await swineRepository.deleteDead(),

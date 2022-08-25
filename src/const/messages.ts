@@ -8,7 +8,7 @@ const usrMentionMdV2 = (username: string, userId: string): string =>
 export const escapeMdV2 = (s = ''): string => s.replace(/[_*[\]()~`>#+-=|{}.!]/gi, '\\$&');
 
 const SYNONIMS: Record<string, string[]> = {
-  swine: ['свин', 'поросенок', 'минипиг', 'боров', 'швайнокарась'],
+  swine: ['свин', 'поросенок', 'минипиг', 'боров', 'швайнокарась', 'хряк'],
   swine_genetive: ['свина', 'поросенка', 'минипига', 'борова', 'швайнокарася'],
   swines: ['свиньи', 'поросята', 'минипиги', 'боровы', 'швайнокараси'],
 };

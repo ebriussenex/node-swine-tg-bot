@@ -59,6 +59,9 @@ const start = async (): Promise<void> => {
     addFightHandlers(bot);
     addInfoHandlers(bot);
     scheduleTask(bot);
+    bot.catch(err => {
+      console.log(err);
+    });
     process.once('SIGINT', () => bot.stop('SIGINT'));
     process.once('SIGTERM', () => bot.stop('SIGTERM'));
   } catch (error) {
