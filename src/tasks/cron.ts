@@ -36,7 +36,7 @@ export const scheduleTask = (bot: Telegraf<Context>): void => {
   );
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   cron.schedule('45 * * * * *', async () => {
-    await bot.telegram.sendMessage(-715518225, 'CHECK1', { parse_mode: 'MarkdownV2' });
+    await bot.telegram.sendMessage(-712412456316225, 'CHECK1', { parse_mode: 'MarkdownV2' });
     const [lossWeight, toKill]: [
       Record<string, [SwinesJoinOneTgUser, number][]>,
       Record<string, SwinesJoinOneTgUser[]>,

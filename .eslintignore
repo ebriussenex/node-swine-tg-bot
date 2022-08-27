@@ -1,3 +1,5 @@
 dist
 node_modules
 .*rc
+jest.config.js
+jest-testcontainers-config.js
