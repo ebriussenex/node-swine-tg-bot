@@ -7,7 +7,7 @@ import { swineService } from '../service/swine.service';
 
 export const scheduleTasks = (bot: Telegraf<Context>): void => {
   cron.schedule(
-    '0 0/12 * * *',
+    '0 */1 * * *',
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     async () => {
       const uniqKeys: string[] = [];
@@ -53,7 +53,7 @@ export const scheduleTasks = (bot: Telegraf<Context>): void => {
     },
   );
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  cron.schedule('15 0/12 * * *', async () => {
+  cron.schedule('15 */1 * * *', async () => {
     await swineRepository.deleteDead();
   });
 };
