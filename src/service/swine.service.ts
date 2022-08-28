@@ -13,6 +13,7 @@ import { messages } from '../const/messages';
 import { computeCD } from './cooldown';
 import { add } from 'date-fns';
 import _ from 'lodash';
+import { BotContext } from '../bot/swinebot.context';
 
 export type FightStatisctics = {
   win: number;
@@ -35,10 +36,18 @@ export const swineService = Object.freeze({
   feed: async (meta: MessageMeta): Promise<string> => {
     const swineOrMsg = await isCreated(meta);
     if (typeof swineOrMsg === 'string') return swineOrMsg;
+
+    if (BotContext.session !== undefined) {
+      if (BotContext.session.chatIdSwine[meta.chat.id].owner_id == swineOrMsg.owner_id) {
+        return messages.CANNOT_FEED_WHEN_FIGHT_STARTED;
+      }
+    }
+
     const cd = computeCD(db.toDate(swineOrMsg.last_time_fed), botConfig.SWINE_FEED_TIMEOUT);
     if (cd[0]) {
       return messages.SWINE_FEED_TIMEOUT_MSG(cd[1][0], cd[1][1]);
     }
+
     const chance = (botConfig.WEIGHTCHANGE_BALANCE.find(w => swineOrMsg.weight <= w[0]) ?? [, 0.5])[1];
     let weightChange = Math.floor(((Math.random() - 0.5) * 2 + chance) * botConfig.SWINE_WEIGHT_CHANGE_ABS);
     console.log(weightChange);
@@ -48,6 +57,7 @@ export const swineService = Object.freeze({
     swineOrMsg.weight += weightChange;
     swineOrMsg.last_time_fed = db.toString(new Date(), 'timestamptz');
     swineOrMsg.fed_times++;
+    swineOrMsg.to_delete = false;
     await swineRepository.upsertSwine(swineOrMsg);
     return messages.SWINE_WEIGHT_CHANGE_MSG(
       swineOrMsg.name,

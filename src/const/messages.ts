@@ -75,8 +75,8 @@ export const messages = Object.freeze({
     messages.NEXT_FEED_TIME_MSG([h, min]),
   SWINE_NOT_EXISTS_MSG: (username: string, userId: string): string =>
     usrMentionMdV2(username, userId) +
-    `, У вас еще нет хряка! Напишите /${commands.NAME} ` +
-    `или /${commands.FEED}, чтобы он родился\\.`,
+    `, У вас еще нет хряка\\! Напишите /${commands.NAME} ` +
+    `или /${commands.FEED}\\, чтобы он родился\\.`,
   ACCEPTED_INVALID_FIGHT_MSG: (username: string, userId: string): string =>
     usrMentionMdV2(username, userId) + `, Вы не можете принять вызов\\. Бой уже состоялся`,
   ACCEPTED_INVALID_FIGHT_SESS_MSG: (username: string, userId: string): string =>
@@ -113,24 +113,33 @@ export const messages = Object.freeze({
   SWINE_ABOUT_TO_DIE: (swineWOwner: SwinesOwners): string =>
     usrMentionMdV2(swineWOwner.username, swineWOwner.userId) +
     `, Ваш свин *${escapeMdV2(swineWOwner.name)}* при смерти, если его не покормить, то через` +
-    ` *${botConfig.MINUTES_BEFORE_CLEAN} мин\\.* он умрет 💀`,
+    ` *${botConfig.MINUTES_BEFORE_CLEAN} мин\\.* он умрет 💀\n`,
   SWINE_NOT_FED_LW_MSG: (swineWOwner: SwinesOwnersLW): string =>
     usrMentionMdV2(swineWOwner.username, swineWOwner.userId) +
     `, Вы не кормили свою свинью 🐽 ${escapeMdV2(swineWOwner.name)} долгое время, он` +
     ` начал худеть и ` +
     `потерял ${swineWOwner.wc} кг\\. веса\\. Теперь поросенок весит *${swineWOwner.weight} кг\\.*` +
-    ` Если не кормить свина, он может погибнуть`,
+    ` Если не кормить свина, он может погибнуть\n`,
   SWINES_ABOUT_TO_DIE_ROW: (r: SwinesOwners): string =>
     usrMentionMdV2(r.username, r.userId) + `, свин *${escapeMdV2(r.name)}*\n`,
   SWINES_ABOUT_TO_DIE: (rows: SwinesOwners[]): string =>
     `${rows.length} поросят при смерти, умрут через 15 минут\\:\n` +
-    rows.map(r => messages.SWINES_ABOUT_TO_DIE_ROW(r)).join(''),
+    rows.map(r => messages.SWINES_ABOUT_TO_DIE_ROW(r)).join('') +
+    '\n',
   SWINES_NOT_FED_LW_ROW: (r: SwinesOwnersLW): string =>
     usrMentionMdV2(r.username, r.userId) +
     `, свин *${escapeMdV2(r.name)}* *${r.weight} кг\\.* потерял *${r.wc} кг\\.*\n`,
   SWINES_NOT_FED_LW: (rows: SwinesOwnersLW[]): string =>
     `${rows.length} свиней не кормили долгое время, они начали терять вес\\:\n` +
-    rows.map(r => messages.SWINES_NOT_FED_LW_ROW(r)).join(''),
+    rows.map(r => messages.SWINES_NOT_FED_LW_ROW(r)).join('') +
+    '\n',
+  CANNOT_FEED_WHEN_FIGHT_STARTED: 'Вы не можете кормить своего свина, так как он ожидает сражения',
+  DEAD_SWINES: (name: string): string => `Поросенок *${escapeMdV2(name)}* трагически скончался\\. Вечная память\\!🕯️`,
+  ONLY_BEGINNER_CAN_DECLINE: (username: string, userId: string): string =>
+    usrMentionMdV2(username, userId) + ', Только пользователь бросивший вызов может его отменить',
+  FIGHT_DECLINED: 'Бой отменен',
+  CANNOT_DECLINE_DONE_FIGHT: (username: string, userId: string): string =>
+    usrMentionMdV2(username, userId) + `, Вы не можете отменить вызов\\. Бой уже состоялся`,
 });
 
 export type SwinesOwners = {
