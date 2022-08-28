@@ -5,7 +5,7 @@ import { infoService } from '../../service/info.service';
 
 export function addInfoHandlers(bot: Telegraf): void {
   bot.command(commands.HELP, async ctx => {
-    await ctx.replyWithMarkdown(infoService.getHelpOnCommands(ctx.message.text));
+    await ctx.replyWithMarkdownV2(infoService.getHelpOnCommands(ctx.message.text));
   });
-  bot.command(commands.INFO, async ctx => await ctx.replyWithMarkdown(messages.BOT_DESCRIPTION_MSG));
+  bot.command(commands.INFO, async ctx => await ctx.replyWithMarkdownV2(messages.BOT_DESCRIPTION_MSG));
 }

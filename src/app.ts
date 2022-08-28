@@ -8,6 +8,8 @@ import { addSwineHandlers } from './bot/handlers/swine.handlers';
 import { noChannelAllowed } from './bot/middlewares/swinebot.nochannelallowed';
 import { addFightHandlers } from './bot/handlers/fight.handlers';
 import { addInfoHandlers } from './bot/handlers/info.handlers';
+import { commandsDescr } from './const/commands';
+import { scheduleTasks } from './tasks/cron';
 
 console.log(`Your tg bot token is ${botConfig.BOT_TOKEN}`);
 
@@ -52,10 +54,14 @@ const start = async (): Promise<void> => {
     if (process.env.NODE_ENV === 'dev') {
       bot.use(Telegraf.log());
     }
+    await bot.telegram.setMyCommands(commandsDescr);
     addSwineHandlers(bot);
     addFightHandlers(bot);
     addInfoHandlers(bot);
-
+    scheduleTasks(bot);
+    bot.catch(err => {
+      console.log(err);
+    });
     process.once('SIGINT', () => bot.stop('SIGINT'));
     process.once('SIGTERM', () => bot.stop('SIGTERM'));
   } catch (error) {
