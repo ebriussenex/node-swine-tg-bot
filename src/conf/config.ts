@@ -34,6 +34,8 @@ export const botConfig = Object.freeze({
   TIME_BEFORE_DEATH: 72,
   MIN_WEIGHT_LOSS: 11,
   MINUTES_BEFORE_CLEAN: 15,
+  EXP_COEFF: 4.033,
+  EXP_TO_LVL_FUNC: (exp: number): number => Math.floor(botConfig.EXP_COEFF * Math.log(exp)) + 1,
 });
 
 export const dbConfig = Object.freeze({

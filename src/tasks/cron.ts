@@ -2,26 +2,24 @@ import _ from 'lodash';
 import * as cron from 'node-cron';
 import { Context, Telegraf } from 'telegraf';
 import { messages, SwinesOwners, SwinesOwnersLW } from '../const/messages';
-import { swineRepository, SwinesJoinOneTgUser } from '../repository/swine.repository';
+import { swineRepository, SwineJoinOneTgUser } from '../repository/swine.repository';
 import { swineService } from '../service/swine.service';
 
 export const scheduleJobs = (bot: Telegraf<Context>): void => {
   cron.schedule(
     '0 */1 * * *',
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    async() => await markToDeleteJob(bot)
+    async () => await markToDeleteJob(bot),
   );
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  cron.schedule('15 */1 * * *', async() => await deleteJob());
+  cron.schedule('15 */1 * * *', async () => await deleteJob());
 };
 
-const markToDeleteJob = async(bot: Telegraf<Context>) => {
+const markToDeleteJob = async (bot: Telegraf<Context>) => {
   const uniqKeys: string[] = [];
   console.log('Mark to delete task started');
-  const [lossWeight, toKill]: [
-    Record<string, [SwinesJoinOneTgUser, number][]>,
-    Record<string, SwinesJoinOneTgUser[]>,
-  ] = await swineService.findNotFed();
+  const [lossWeight, toKill]: [Record<string, [SwineJoinOneTgUser, number][]>, Record<string, SwineJoinOneTgUser[]>] =
+    await swineService.findNotFed();
   if (Object.keys(lossWeight).length > 0) {
     Object.keys(lossWeight).forEach(e => uniqKeys.push(e));
   }
@@ -58,11 +56,11 @@ const markToDeleteJob = async(bot: Telegraf<Context>) => {
   }
 };
 
-const deleteJob = async() => {
+const deleteJob = async () => {
   await swineRepository.deleteDead();
 };
 
-const swineOwnersLwFromSwine = (swine: [SwinesJoinOneTgUser, number]): SwinesOwnersLW => ({
+const swineOwnersLwFromSwine = (swine: [SwineJoinOneTgUser, number]): SwinesOwnersLW => ({
   userId: swine[0].owner_id,
   username: swine[0].tg_user.first_name,
   name: swine[0].name,
@@ -70,7 +68,7 @@ const swineOwnersLwFromSwine = (swine: [SwinesJoinOneTgUser, number]): SwinesOwn
   weight: swine[0].weight,
 });
 
-const swineOwnersFromSwine = (swine: SwinesJoinOneTgUser): SwinesOwners => ({
+const swineOwnersFromSwine = (swine: SwineJoinOneTgUser): SwinesOwners => ({
   userId: swine.owner_id,
   username: swine.tg_user.first_name,
   name: swine.name,

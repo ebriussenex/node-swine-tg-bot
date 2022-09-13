@@ -25,6 +25,15 @@ export function addSwineHandlers(bot: Telegraf): void {
   bot.command(commands.TOP_OWNERS, async ctx => {
     await ctx.replyWithMarkdownV2(await swineService.getTopWithOwners(meta(ctx)));
   });
+  bot.command(commands.TOP_FIGHTERS, async ctx => {
+    await ctx.replyWithMarkdownV2(await swineService.getTopFighters(meta(ctx)));
+  });
+  bot.command(commands.TOP_EXP, async ctx => {
+    await ctx.replyWithMarkdownV2(await swineService.getTopExpWithOwners(meta(ctx)));
+  });
+  bot.command(commands.SWINE_STATS, async ctx => {
+    await ctx.replyWithMarkdownV2(await swineService.getStats(meta(ctx)));
+  });
 }
 
 function parseCommandArgs(command: string, commandLength: number): string[] {
