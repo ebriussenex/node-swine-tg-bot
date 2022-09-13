@@ -38,8 +38,10 @@ export const swineService = Object.freeze({
     if (typeof swineOrMsg === 'string') return swineOrMsg;
 
     if (BotContext.session !== undefined) {
-      if (BotContext.session.chatIdSwine[meta.chat.id].owner_id == swineOrMsg.owner_id) {
-        return messages.CANNOT_FEED_WHEN_FIGHT_STARTED;
+      if (BotContext.session.chatIdSwine[meta.chat.id] !== undefined) {
+        if (BotContext.session.chatIdSwine[meta.chat.id].owner_id == swineOrMsg.owner_id) {
+          return messages.CANNOT_FEED_WHEN_FIGHT_STARTED;
+        }
       }
     }
 
