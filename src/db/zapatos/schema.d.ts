@@ -101,6 +101,84 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `false`
       */
     to_delete: boolean;
+      /**
+      * **swines.max_weight**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    max_weight: number;
+      /**
+      * **swines.win_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row: number;
+      /**
+      * **swines.loss_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row: number;
+      /**
+      * **swines.draw_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row: number;
+      /**
+      * **swines.win_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row_max: number;
+      /**
+      * **swines.loss_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row_max: number;
+      /**
+      * **swines.draw_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row_max: number;
+      /**
+      * **swines.feed_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_timeout: number;
+      /**
+      * **swines.fight_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_timeout: number;
+      /**
+      * **swines.feed_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_mult: number;
+      /**
+      * **swines.fight_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_mult: number;
+      /**
+      * **swines.experience**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    experience: number;
+      /**
+      * **swines.points**
+      * - `numeric` in database
+      * - `NOT NULL`, default: `0`
+      */
+    points: number;
     }
     export interface JSONSelectable {
       /**
@@ -175,6 +253,84 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `false`
       */
     to_delete: boolean;
+      /**
+      * **swines.max_weight**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    max_weight: number;
+      /**
+      * **swines.win_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row: number;
+      /**
+      * **swines.loss_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row: number;
+      /**
+      * **swines.draw_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row: number;
+      /**
+      * **swines.win_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row_max: number;
+      /**
+      * **swines.loss_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row_max: number;
+      /**
+      * **swines.draw_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row_max: number;
+      /**
+      * **swines.feed_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_timeout: number;
+      /**
+      * **swines.fight_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_timeout: number;
+      /**
+      * **swines.feed_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_mult: number;
+      /**
+      * **swines.fight_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_mult: number;
+      /**
+      * **swines.experience**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    experience: number;
+      /**
+      * **swines.points**
+      * - `numeric` in database
+      * - `NOT NULL`, default: `0`
+      */
+    points: number;
     }
     export interface Whereable {
       /**
@@ -249,6 +405,84 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `false`
       */
     to_delete?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.max_weight**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    max_weight?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.win_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.loss_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.draw_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.win_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row_max?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.loss_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row_max?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.draw_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row_max?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.feed_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_timeout?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.fight_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_timeout?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.feed_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_mult?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.fight_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_mult?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.experience**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    experience?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **swines.points**
+      * - `numeric` in database
+      * - `NOT NULL`, default: `0`
+      */
+    points?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -323,6 +557,84 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `false`
       */
     to_delete?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.max_weight**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    max_weight?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.win_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.loss_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.draw_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.win_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row_max?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.loss_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row_max?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.draw_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row_max?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.feed_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_timeout?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.fight_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_timeout?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.feed_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_mult?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.fight_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_mult?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.experience**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    experience?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **swines.points**
+      * - `numeric` in database
+      * - `NOT NULL`, default: `0`
+      */
+    points?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -397,6 +709,84 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `false`
       */
     to_delete?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.max_weight**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    max_weight?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.win_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.loss_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.draw_in_row**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.win_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    win_in_row_max?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.loss_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    loss_in_row_max?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.draw_in_row_max**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    draw_in_row_max?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.feed_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_timeout?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.fight_add_timeout**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_timeout?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.feed_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    feed_add_mult?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.fight_add_mult**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    fight_add_mult?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.experience**
+      * - `int4` in database
+      * - `NOT NULL`, default: `0`
+      */
+    experience?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **swines.points**
+      * - `numeric` in database
+      * - `NOT NULL`, default: `0`
+      */
+    points?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'swines_pkey';
     export type Column = keyof Selectable;

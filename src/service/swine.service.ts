@@ -2,11 +2,7 @@
 
 import { MessageMeta } from '../bot/handlers/swine.handlers';
 import { botConfig } from '../conf/config';
-import {
-  swineInsertableFromSwinesJoinOneTgUser,
-  swineRepository,
-  SwinesJoinOneTgUser,
-} from '../repository/swine.repository';
+import { swineInsertableForRPJobs, swineRepository, SwineJoinOneTgUser } from '../repository/swine.repository';
 import * as db from 'zapatos/db';
 import type * as s from 'zapatos/schema';
 import { messages } from '../const/messages';
@@ -22,26 +18,54 @@ export type FightStatisctics = {
 };
 
 export const swineService = Object.freeze({
+  getStats: async (meta: MessageMeta): Promise<string> => {
+    const swineOrMsg = await isCreated(meta);
+    if (typeof swineOrMsg === 'string') return swineOrMsg;
+    const cdFeed = computeCD(db.toDate(swineOrMsg.last_time_fed), botConfig.SWINE_FEED_TIMEOUT);
+    const cdFight = computeCD(db.toDate(swineOrMsg.last_time_fought), botConfig.SWINE_FIGHT_TIMEOUT);
+    return messages.SWINE_STATS_MSG(
+      swineOrMsg.name,
+      swineOrMsg.weight,
+      swineOrMsg.max_weight,
+      cdFeed[1],
+      cdFight[1],
+      {
+        win: swineOrMsg.win,
+        loss: swineOrMsg.loss,
+        draw: swineOrMsg.draw,
+      },
+      botConfig.EXP_TO_LVL_FUNC(swineOrMsg.experience),
+      swineOrMsg.win_in_row,
+      swineOrMsg.draw_in_row,
+      swineOrMsg.loss_in_row,
+      swineOrMsg.win_in_row_max,
+      swineOrMsg.draw_in_row_max,
+      swineOrMsg.loss_in_row_max,
+      swineOrMsg.fed_times,
+    );
+  },
   get: async (meta: MessageMeta): Promise<string> => {
     const swineOrMsg = await isCreated(meta);
     if (typeof swineOrMsg === 'string') return swineOrMsg;
     const cdFeed = computeCD(db.toDate(swineOrMsg.last_time_fed), botConfig.SWINE_FEED_TIMEOUT);
     const cdFight = computeCD(db.toDate(swineOrMsg.last_time_fought), botConfig.SWINE_FIGHT_TIMEOUT);
-    return messages.SWINE_INFO_MSG(swineOrMsg.name, swineOrMsg.weight, cdFeed[1], cdFight[1], {
-      win: swineOrMsg.win,
-      loss: swineOrMsg.loss,
-      draw: swineOrMsg.draw,
-    });
+    return messages.SWINE_INFO_MSG(
+      swineOrMsg.name,
+      swineOrMsg.weight,
+      swineOrMsg.max_weight,
+      cdFeed[1],
+      cdFight[1],
+      {
+        win: swineOrMsg.win,
+        loss: swineOrMsg.loss,
+        draw: swineOrMsg.draw,
+      },
+       botConfig.EXP_TO_LVL_FUNC(swineOrMsg.experience),
+    );
   },
   feed: async (meta: MessageMeta): Promise<string> => {
     const swineOrMsg = await isCreated(meta);
     if (typeof swineOrMsg === 'string') return swineOrMsg;
-
-    if (BotContext.session !== undefined) {
-      if (BotContext.session.chatIdSwine[meta.chat.id].owner_id == swineOrMsg.owner_id) {
-        return messages.CANNOT_FEED_WHEN_FIGHT_STARTED;
-      }
-    }
 
     const cd = computeCD(db.toDate(swineOrMsg.last_time_fed), botConfig.SWINE_FEED_TIMEOUT);
     if (cd[0]) {
@@ -69,6 +93,7 @@ export const swineService = Object.freeze({
   },
   rename: async (meta: MessageMeta, name: string): Promise<string> => {
     name = name.trim();
+    
     if (name.length > botConfig.MAX_NAME_LENGTH) {
       return messages.TOO_LARGE_NAME_MSG;
     }
@@ -86,21 +111,58 @@ export const swineService = Object.freeze({
       n,
     );
     return (
-      messages.TOP_MSG(chat.first_name ?? chat.title ?? '') +
-      swines.map((swine, index) => messages.TOP_ROW_MSG(index + 1, swine.name, swine.weight)).join('')
+      messages.TOP_WEIGHT_MSG(chat.first_name ?? chat.title ?? '') +
+      swines.map((swine, index) => messages.TOP_WEIGHT_ROW_MSG(index + 1, swine.name, swine.weight)).join('')
     );
   },
   getTopWithOwners: async (meta: MessageMeta, n?: number): Promise<string> => {
-    const [swinesAndOwners, chat]: [SwinesJoinOneTgUser[], s.tg_chats.JSONSelectable] =
+    const [swinesAndOwners, chat]: [SwineJoinOneTgUser[], s.tg_chats.JSONSelectable] =
       await swineRepository.findTopSwinesWithOwners(meta, n);
     return (
-      messages.TOP_MSG(chat.first_name ?? chat.title ?? '') +
+      messages.TOP_WEIGHT_MSG(chat.first_name ?? chat.title ?? '') +
       swinesAndOwners
         .map((swineAndOwner, index) =>
-          messages.TOP_ROW_OWNERS_MSG(
+          messages.TOP_ROW_OWNERS_WEIGHT_MSG(
             index + 1,
             swineAndOwner.name,
             swineAndOwner.weight,
+            swineAndOwner.tg_user.first_name,
+          ),
+        )
+        .join('')
+    );
+  },
+  getTopFighters: async (meta: MessageMeta, n?: number): Promise<string> => {
+    const [swinesAndOwners, chat]: [SwineJoinOneTgUser[], s.tg_chats.JSONSelectable] =
+      await swineRepository.findTopFightersPointsWithOwners(meta, n);
+    return (
+      messages.TOP_FIGHT_MSG(chat.first_name ?? chat.title ?? '') +
+      swinesAndOwners
+        .map((swineAndOwner, index) =>
+          messages.TOP_ROW_OWNERS_FIGHT_MSG(
+            index + 1,
+            swineAndOwner.name,
+            swineAndOwner.points,
+            swineAndOwner.win,
+            swineAndOwner.loss,
+            swineAndOwner.draw,
+            swineAndOwner.tg_user.first_name,
+          ),
+        )
+        .join('')
+    );
+  },
+  getTopExpWithOwners: async (meta: MessageMeta, n?: number): Promise<string> => {
+    const [swinesAndOwners, chat]: [SwineJoinOneTgUser[], s.tg_chats.JSONSelectable] =
+      await swineRepository.findTopExperiencedWithOwners(meta, n);
+    return (
+      messages.TOP_LVL_MSG(chat.first_name ?? chat.title ?? '') +
+      swinesAndOwners
+        .map((swineAndOwner, index) =>
+          messages.TOP_ROW_OWNERS_LVL_MSG(
+            index + 1,
+            swineAndOwner.name,
+            botConfig.EXP_TO_LVL_FUNC(swineAndOwner.experience),
             swineAndOwner.tg_user.first_name,
           ),
         )
@@ -114,11 +176,11 @@ export const swineService = Object.freeze({
       return messages.SWINE_DELETE_MSG;
     }),
   findNotFed: async (): Promise<
-    [Record<string, [SwinesJoinOneTgUser, number][]>, Record<string, SwinesJoinOneTgUser[]>]
+    [Record<string, [SwineJoinOneTgUser, number][]>, Record<string, SwineJoinOneTgUser[]>]
   > => {
-    const lossWeight: Record<string, [SwinesJoinOneTgUser, number][]> = {};
-    const toKill: Record<string, SwinesJoinOneTgUser[]> = {};
-    const swines = await swineRepository.findNotFed();
+    const lossWeight: Record<string, [SwineJoinOneTgUser, number][]> = {};
+    const toKill: Record<string, SwineJoinOneTgUser[]> = {};
+    const swines: SwineJoinOneTgUser[] = await swineRepository.findNotFed();
     if (swines !== undefined && swines.length > 0) {
       for (const sw of swines) {
         if (
@@ -146,7 +208,7 @@ export const swineService = Object.freeze({
         }
       }
     }
-    await swineRepository.upsertSwines(swines.map(s => swineInsertableFromSwinesJoinOneTgUser(s)));
+    await swineRepository.upsertSwines(swines.map(s => swineInsertableForRPJobs(s)));
     return [lossWeight, toKill];
   },
   deleteDeadSwines: async (): Promise<s.swines.JSONSelectable[]> => await swineRepository.deleteDead(),

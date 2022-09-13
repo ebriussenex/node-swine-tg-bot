@@ -2,6 +2,7 @@ import { Context, Telegraf } from 'telegraf';
 import { Chat, User } from 'typegram';
 import { swineService } from '../../service/swine.service';
 import { commands } from '../../const/commands';
+import { messages } from '../../const/messages';
 
 export type MessageMeta = {
   chat: Chat;
@@ -13,6 +14,8 @@ export function addSwineHandlers(bot: Telegraf): void {
     await ctx.replyWithMarkdownV2(await swineService.feed(meta(ctx)));
   });
   bot.command(commands.NAME, async ctx => {
+    if(ctx.message.text[commands.NAME.length + 1] === '@') 
+      await ctx.replyWithMarkdownV2(messages.CMD_CANNOT_BE_DONE_WITH_MENU(commands.NAME)); 
     const name: string = parseCommandArgs(ctx.message.text, commands.NAME.length).join(' ');
     await ctx.replyWithMarkdownV2(await swineService.rename(meta(ctx), name));
   });
@@ -24,6 +27,15 @@ export function addSwineHandlers(bot: Telegraf): void {
   });
   bot.command(commands.TOP_OWNERS, async ctx => {
     await ctx.replyWithMarkdownV2(await swineService.getTopWithOwners(meta(ctx)));
+  });
+  bot.command(commands.TOP_FIGHTERS, async ctx => {
+    await ctx.replyWithMarkdownV2(await swineService.getTopFighters(meta(ctx)));
+  });
+  bot.command(commands.TOP_EXP, async ctx => {
+    await ctx.replyWithMarkdownV2(await swineService.getTopExpWithOwners(meta(ctx)));
+  });
+  bot.command(commands.SWINE_STATS, async ctx => {
+    await ctx.replyWithMarkdownV2(await swineService.getStats(meta(ctx)));
   });
 }
 

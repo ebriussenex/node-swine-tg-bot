@@ -13,6 +13,9 @@ export const commands = Object.freeze({
   INFO: 'info',
   FIGHT: 'fight',
   TOP_OWNERS: 'top_owners',
+  SWINE_STATS: 'stats',
+  TOP_FIGHTERS: 'top_fight',
+  TOP_EXP: 'top_exp',
 });
 
 export const commandsVerboseDescr: BotCommand[] = [
@@ -62,32 +65,28 @@ export const commandsVerboseDescr: BotCommand[] = [
     command: '/top_owners',
     description: 'Топ свиней с именами владельцев',
   },
+  {
+    command: '/stats',
+    description: 'Подробная статистика',
+  },
+  {
+    command: '/top_fight',
+    description: 'Лучшие бойцы',
+  },
+  {
+    command: '/top_exp',
+    description: 'Топ по опыту',
+  },
 ];
 
 export const commandsDescr: BotCommand[] = [
-  {
-    command: `/${commands.NAME}`,
-    description: 'Создать свина с именем или переименовать',
-  },
   {
     command: `/${commands.FEED}`,
     description: 'Накормить поросенка',
   },
   {
-    command: `/${commands.TOP}`,
-    description: 'Топ швайнокарасей',
-  },
-  {
-    command: `/${commands.HELP}`,
-    description: 'Подробное описание команд',
-  },
-  {
     command: `/${commands.MY_SWINE}`,
     description: 'Информация о вашей свинье',
-  },
-  {
-    command: `/${commands.INFO}`,
-    description: 'Информация о боте',
   },
   {
     command: `/${commands.FIGHT}`,
@@ -96,5 +95,33 @@ export const commandsDescr: BotCommand[] = [
   {
     command: `/${commands.TOP_OWNERS}`,
     description: 'Топ свиней с именами владельцев',
+  },
+  {
+    command: `/${commands.SWINE_STATS}`,
+    description: 'Подробная статистика',
+  },
+  {
+    command: `/${commands.TOP_FIGHTERS}`,
+    description: 'Лучшие бойцы',
+  },
+  {
+    command: `/${commands.TOP_EXP}`,
+    description: 'Топ по опыту',
+  },
+  {
+    command: `/${commands.TOP}`,
+    description: 'Топ швайнокарасей',
+  },
+  {
+    command: `/${commands.NAME}`,
+    description: 'Создать свина с именем или переименовать',
+  },
+  {
+    command: `/${commands.INFO}`,
+    description: 'Информация о боте',
+  },
+  {
+    command: `/${commands.HELP}`,
+    description: 'Подробное описание команд',
   },
 ];

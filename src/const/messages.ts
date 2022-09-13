@@ -84,24 +84,83 @@ export const messages = Object.freeze({
   SELF_FIGHT_MSG: 'Вы не можете принять вызов от самого себя',
   LOSS: 'похудел',
   GAIN: 'поправился',
-  TOP_MSG: (chatName: string): string => `🐷Топ швайнокарасей беседы *${escapeMdV2(chatName)}*🐷: \n`,
-  TOP_ROW_MSG: (pos: number, name: string, weight: number): string =>
+
+  TOP_WEIGHT_MSG: (chatName: string): string => `🐷Топ швайнокарасей беседы *${escapeMdV2(chatName)}*🐷: \n`,
+  TOP_FIGHT_MSG: (chatName: string): string => `🐷💪Топ воинов беседы *${escapeMdV2(chatName)}*🐷: \n`,
+  TOP_LVL_MSG: (chatName: string): string => `🆙 Топ самых опытных свинов беседы *${escapeMdV2(chatName)}*🐷: \n`,
+
+  TOP_WEIGHT_ROW_MSG: (pos: number, name: string, weight: number): string =>
     `*${pos}*\\. ${escapeMdV2(name)} \\- *${weight} кг*\n`,
-  TOP_ROW_OWNERS_MSG: (pos: number, name: string, weight: number, userFirstName: string): string =>
+  TOP_FIGHT_ROW_MSG: (pos: number, name: string, points: number, win: number, loss: number, draw: number): string =>
+    `*${pos}*\\. ${escapeMdV2(name)} \\- *${escapeMdV2(points.toString())} оч\\.* в\\/н\\/п: ${win}\\/${draw}\\/${loss}\n`,
+  TOP_LVL_ROW_MSG: (pos: number, name: string, lvl: number): string =>
+    `*${pos}*\\. ${escapeMdV2(name)} \\- *${lvl} ур\\.*\n`,
+
+  TOP_ROW_OWNERS_WEIGHT_MSG: (pos: number, name: string, weight: number, userFirstName: string): string =>
     `*${pos}*\\. ${escapeMdV2(name)} \\- *${weight} кг*, \\- *${escapeMdV2(userFirstName)}*\n`,
+  TOP_ROW_OWNERS_FIGHT_MSG: (
+    pos: number,
+    name: string,
+    points: number,
+    win: number,
+    loss: number,
+    draw: number,
+    userFirstName: string,
+  ): string =>
+    `*${pos}*\\. ${escapeMdV2(name)} \\- *${escapeMdV2(points.toString())} оч\\.* в\\/н\\/п: ${win}\\/${draw}\\/${loss}\\- *${escapeMdV2(
+      userFirstName,
+    )}*\n`,
+  TOP_ROW_OWNERS_LVL_MSG: (pos: number, name: string, lvl: number, userFirstName: string): string =>
+    `*${pos}*\\. ${escapeMdV2(name)} \\- *${lvl} ур\\.*, \\- *${escapeMdV2(userFirstName)}*\n`,
+
   SWINE_DELETE_MSG: 'Ваш поросенок был убит\\. Помянем',
-  SWINE_INFO_MSG: (
+  SWINE_STATS_MSG: (
     name: string,
     weight: number,
+    mWeight: number,
     hm: [number, number],
     fhm: [number, number],
     fightStats: FightStatisctics,
+    lvl: number,
+    wir: number,
+    dir: number,
+    lir: number,
+    mwir: number,
+    mdir: number,
+    mlir: number,
+    fedTimes: number,
   ): string =>
-    `Швайнокарась 🐽 *${escapeMdV2(name)}*, *${weight}* кг\\.\n` +
+    messages.SWINE_MSG(name, lvl, weight) +
+    messages.MAX_WEIGHT_MSG(mWeight) +
+    messages.FED_TIMES_MSG(fedTimes) +
     messages.NEXT_FEED_TIME_MSG(hm) +
     messages.NEXT_FIGHT_TIME_MSG(fhm) +
-    messages.FIGHT_STAT_MSG(fightStats),
+    messages.FIGHT_STAT_MSG(fightStats) +
+    messages.IN_ROW_MSG(wir, dir, lir) +
+    messages.STREAKS_MSG(mwir, mdir, mlir),
+  SWINE_INFO_MSG: (
+    name: string,
+    weight: number,
+    mWeight: number,
+    hm: [number, number],
+    fhm: [number, number],
+    fightStats: FightStatisctics,
+    lvl: number,
+  ): string =>
+    messages.SWINE_MSG(name, lvl, weight) +
+    messages.NEXT_FEED_TIME_MSG(hm) +
+    messages.NEXT_FIGHT_TIME_MSG(fhm) +
+    messages.FIGHT_STAT_MSG(fightStats) +
+    messages.MAX_WEIGHT_MSG(mWeight),
   CHANNEL_IS_NOT_ALLOWED_MSG: 'Бот не предназначен для каналов, всем пока',
+  STREAKS_MSG: (mwir: number, mdir: number, mlir: number): string => `Стрики \\- ${mwir}\\/${mdir}\\/${mlir}\n`,
+  SWINE_MSG: (name: string, lvl: number, weight: number): string =>
+    `Швайнокарась 🐽 *${escapeMdV2(name)}* *${lvl} ур\\.*, *${weight}* кг\\.\n`,
+  FED_TIMES_MSG: (ft: number): string => `Покормлен *${ft}* раз\n`,
+  MAX_WEIGHT_MSG: (mw: number): string => `Максимальный вес \\- *${mw} кг*\n`,
+  IN_ROW_MSG: (wir: number, dir: number, lir: number): string =>
+    `Подряд ${wir != 0 ? 'побед' : dir != 0 ? 'ничьих' : 'поражений'} \\- ` +
+    `${wir != 0 ? wir : dir != 0 ? dir : lir},\n`,
   NEXT_FIGHT_TIME_MSG: (hm: [number, number]): string =>
     `Следующая битва доступна через *${hm[0]} ч\\. ${hm[1]} мин\\.*\n`,
   NEXT_FEED_TIME_MSG: (hm: [number, number]): string => `До следующей покормки *${hm[0]} ч\\. ${hm[1]} мин*\\.\n`,
@@ -140,6 +199,8 @@ export const messages = Object.freeze({
   FIGHT_DECLINED: 'Бой отменен',
   CANNOT_DECLINE_DONE_FIGHT: (username: string, userId: string): string =>
     usrMentionMdV2(username, userId) + `, Вы не можете отменить вызов\\. Бой уже состоялся`,
+  CMD_CANNOT_BE_DONE_WITH_MENU: (cmd: string): string => `Команда \\/${escapeMdV2(cmd)} не может быть вызвана из меню напишите` + 
+  ` \`\`\`/<command> <params>\`\`\`\n`
 });
 
 export type SwinesOwners = {

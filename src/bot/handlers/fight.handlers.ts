@@ -54,12 +54,14 @@ export function addFightHandlers(bot: Telegraf): void {
     } else if (cmeta.user.id.toString() === BotContext.session.chatIdSwine[chatId].owner_id) {
       return ctx.replyWithMarkdownV2(messages.SELF_FIGHT_MSG);
     } else {
-      await ctx.replyWithMarkdownV2(messages.ACCEPT_FIGHT_MSG(cmeta.user.first_name, cmeta.user.id.toString()));
       const msg = await fightService.acceptFight(cmeta);
-      return ctx.replyWithMarkdownV2(msg[0]);
+      if (msg[1]) {
+        await ctx.replyWithMarkdownV2(messages.ACCEPT_FIGHT_MSG(cmeta.user.first_name, cmeta.user.id.toString()));
+      }
+      await ctx.replyWithMarkdownV2(msg[0]);
     }
   });
-  
+
   bot.action('action.decline_fight', async ctx => {
     if (ctx.callbackQuery === undefined) throw Error('undef callbackQuery');
     if (ctx.chat === undefined) throw Error('undef chat');
