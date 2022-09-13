@@ -60,7 +60,7 @@ export const swineService = Object.freeze({
         loss: swineOrMsg.loss,
         draw: swineOrMsg.draw,
       },
-      botConfig.EXP_TO_LVL_FUNC(swineOrMsg.experience),
+       botConfig.EXP_TO_LVL_FUNC(swineOrMsg.experience),
     );
   },
   feed: async (meta: MessageMeta): Promise<string> => {
@@ -163,10 +163,10 @@ export const swineService = Object.freeze({
     const [swinesAndOwners, chat]: [SwineJoinOneTgUser[], s.tg_chats.JSONSelectable] =
       await swineRepository.findTopExperiencedWithOwners(meta, n);
     return (
-      messages.TOP_WEIGHT_MSG(chat.first_name ?? chat.title ?? '') +
+      messages.TOP_LVL_MSG(chat.first_name ?? chat.title ?? '') +
       swinesAndOwners
         .map((swineAndOwner, index) =>
-          messages.TOP_ROW_OWNERS_WEIGHT_MSG(
+          messages.TOP_ROW_OWNERS_LVL_MSG(
             index + 1,
             swineAndOwner.name,
             botConfig.EXP_TO_LVL_FUNC(swineAndOwner.experience),

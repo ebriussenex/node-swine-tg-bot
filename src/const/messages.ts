@@ -92,7 +92,7 @@ export const messages = Object.freeze({
   TOP_WEIGHT_ROW_MSG: (pos: number, name: string, weight: number): string =>
     `*${pos}*\\. ${escapeMdV2(name)} \\- *${weight} кг*\n`,
   TOP_FIGHT_ROW_MSG: (pos: number, name: string, points: number, win: number, loss: number, draw: number): string =>
-    `*${pos}*\\. ${escapeMdV2(name)} \\- *${points} оч\\.* в\\/н\\/п: ${win}\\/${draw}\\/${loss}\n`,
+    `*${pos}*\\. ${escapeMdV2(name)} \\- *${escapeMdV2(points.toString())} оч\\.* в\\/н\\/п: ${win}\\/${draw}\\/${loss}\n`,
   TOP_LVL_ROW_MSG: (pos: number, name: string, lvl: number): string =>
     `*${pos}*\\. ${escapeMdV2(name)} \\- *${lvl} ур\\.*\n`,
 
@@ -107,10 +107,10 @@ export const messages = Object.freeze({
     draw: number,
     userFirstName: string,
   ): string =>
-    `*${pos}*\\. ${escapeMdV2(name)} \\- *${points} оч\\.* в\\/н\\/п: ${win}\\/${draw}\\/${loss}\\- *${escapeMdV2(
+    `*${pos}*\\. ${escapeMdV2(name)} \\- *${escapeMdV2(points.toString())} оч\\.* в\\/н\\/п: ${win}\\/${draw}\\/${loss}\\- *${escapeMdV2(
       userFirstName,
     )}*\n`,
-  TOP_ROW_OWNERS_EXP_MSG: (pos: number, name: string, lvl: number, userFirstName: string): string =>
+  TOP_ROW_OWNERS_LVL_MSG: (pos: number, name: string, lvl: number, userFirstName: string): string =>
     `*${pos}*\\. ${escapeMdV2(name)} \\- *${lvl} ур\\.*, \\- *${escapeMdV2(userFirstName)}*\n`,
 
   SWINE_DELETE_MSG: 'Ваш поросенок был убит\\. Помянем',
