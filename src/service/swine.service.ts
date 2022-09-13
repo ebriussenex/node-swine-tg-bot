@@ -67,14 +67,6 @@ export const swineService = Object.freeze({
     const swineOrMsg = await isCreated(meta);
     if (typeof swineOrMsg === 'string') return swineOrMsg;
 
-    if (BotContext.session !== undefined) {
-      if (BotContext.session.chatIdSwine[meta.chat.id] !== undefined) {
-        if (BotContext.session.chatIdSwine[meta.chat.id].owner_id == swineOrMsg.owner_id) {
-          return messages.CANNOT_FEED_WHEN_FIGHT_STARTED;
-        }
-      }
-    }
-
     const cd = computeCD(db.toDate(swineOrMsg.last_time_fed), botConfig.SWINE_FEED_TIMEOUT);
     if (cd[0]) {
       return messages.SWINE_FEED_TIMEOUT_MSG(cd[1][0], cd[1][1]);

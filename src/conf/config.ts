@@ -31,7 +31,7 @@ export const botConfig = Object.freeze({
   ] as [number, number][],
   DRAW_CHANCE: 0.2,
   TIME_BEFORE_WEIGHT_LOSE: 24,
-  TIME_BEFORE_DEATH: 72,
+  TIME_BEFORE_DEATH: 96,
   MIN_WEIGHT_LOSS: 11,
   MINUTES_BEFORE_CLEAN: 15,
   EXP_COEFF: 0.7276,

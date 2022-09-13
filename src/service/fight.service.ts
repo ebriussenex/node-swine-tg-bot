@@ -34,20 +34,22 @@ export const fightService = Object.freeze({
   },
 
   acceptFight: async (meta: MessageMeta): Promise<[string, boolean]> => {
+    const chatId = meta.chat.id;
     if (BotContext.session === undefined) throw Error("Session undefined, shouldn't happen ever in accceptFight");
     const swineOrMsg = await isLegitimate(meta);
     if (typeof swineOrMsg === 'string') return [swineOrMsg, false];
     const swine = swineOrMsg;
     const initWeight = swine.weight;
-    const fr = battle(BotContext.session.chatIdSwine[meta.chat.id], swine);
+    await updateFirstSwine(chatId);
+    const fr = battle(BotContext.session.chatIdSwine[chatId], swine);
     await swineRepository.upsertSwines([fr.lhs, fr.rhs]);
-    delete BotContext.session.chatIdSwine[meta.chat.id];
+    delete BotContext.session.chatIdSwine[chatId];
     if (fr.result === 'rw') [fr.lhs, fr.rhs] = [fr.rhs, fr.lhs];
     return fr.result === 'dr'
       ? [
           messages.DRAW_MSG(
-            BotContext.session.chatIdUser[meta.chat.id].first_name,
-            BotContext.session.chatIdUser[meta.chat.id].id.toString(),
+            BotContext.session.chatIdUser[chatId].first_name,
+            BotContext.session.chatIdUser[chatId].id.toString(),
             swine.name,
             swine.weight,
           ),
@@ -114,3 +116,11 @@ const changeWeightsLW = (lhs: s.swines.JSONSelectable, rhs: s.swines.JSONSelecta
     rhs.loss++;
   }
 };
+
+async function updateFirstSwine(chatId: number) {
+  if (BotContext.session === undefined) throw Error("Session undefined, shouldn't happen ever in updateFirstSwine");
+  const before = BotContext.session.chatIdSwine[chatId];
+  const after = await swineRepository.findSwine(before.owner_id, before.chat_id)
+  if (after === undefined) delete BotContext.session.chatIdSwine[chatId];
+  else BotContext.session.chatIdSwine[chatId] = after;
+}
