@@ -199,6 +199,8 @@ export const messages = Object.freeze({
   FIGHT_DECLINED: 'Бой отменен',
   CANNOT_DECLINE_DONE_FIGHT: (username: string, userId: string): string =>
     usrMentionMdV2(username, userId) + `, Вы не можете отменить вызов\\. Бой уже состоялся`,
+  CMD_CANNOT_BE_DONE_WITH_MENU: (cmd: string): string => `Команда \\/${escapeMdV2(cmd)} не может быть вызвана из меню напишите` + 
+  ` \`\`\`/<command> <params>\`\`\`\n`
 });
 
 export type SwinesOwners = {

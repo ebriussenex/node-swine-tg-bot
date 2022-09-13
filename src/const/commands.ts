@@ -81,28 +81,12 @@ export const commandsVerboseDescr: BotCommand[] = [
 
 export const commandsDescr: BotCommand[] = [
   {
-    command: `/${commands.NAME}`,
-    description: 'Создать свина с именем или переименовать',
-  },
-  {
     command: `/${commands.FEED}`,
     description: 'Накормить поросенка',
   },
   {
-    command: `/${commands.TOP}`,
-    description: 'Топ швайнокарасей',
-  },
-  {
-    command: `/${commands.HELP}`,
-    description: 'Подробное описание команд',
-  },
-  {
     command: `/${commands.MY_SWINE}`,
     description: 'Информация о вашей свинье',
-  },
-  {
-    command: `/${commands.INFO}`,
-    description: 'Информация о боте',
   },
   {
     command: `/${commands.FIGHT}`,
@@ -113,15 +97,31 @@ export const commandsDescr: BotCommand[] = [
     description: 'Топ свиней с именами владельцев',
   },
   {
-    command: `${commands.SWINE_STATS}`,
+    command: `/${commands.SWINE_STATS}`,
     description: 'Подробная статистика',
   },
   {
-    command: `${commands.TOP_FIGHTERS}`,
+    command: `/${commands.TOP_FIGHTERS}`,
     description: 'Лучшие бойцы',
   },
   {
-    command: `${commands.TOP_EXP}`,
+    command: `/${commands.TOP_EXP}`,
     description: 'Топ по опыту',
+  },
+  {
+    command: `/${commands.TOP}`,
+    description: 'Топ швайнокарасей',
+  },
+  {
+    command: `/${commands.NAME}`,
+    description: 'Создать свина с именем или переименовать',
+  },
+  {
+    command: `/${commands.INFO}`,
+    description: 'Информация о боте',
+  },
+  {
+    command: `/${commands.HELP}`,
+    description: 'Подробное описание команд',
   },
 ];

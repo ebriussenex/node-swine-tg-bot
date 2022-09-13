@@ -55,7 +55,8 @@ const start = async (): Promise<void> => {
     if (process.env.NODE_ENV === 'dev') {
       bot.use(Telegraf.log());
     }
-    migrateDb();
+    // migrateDb();
+    await bot.telegram.deleteMyCommands();
     await bot.telegram.setMyCommands(commandsDescr);
     addSwineHandlers(bot);
     addFightHandlers(bot);

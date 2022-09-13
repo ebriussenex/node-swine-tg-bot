@@ -93,6 +93,7 @@ export const swineService = Object.freeze({
   },
   rename: async (meta: MessageMeta, name: string): Promise<string> => {
     name = name.trim();
+    
     if (name.length > botConfig.MAX_NAME_LENGTH) {
       return messages.TOO_LARGE_NAME_MSG;
     }

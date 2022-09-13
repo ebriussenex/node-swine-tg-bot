@@ -57,6 +57,7 @@ const markToDeleteJob = async (bot: Telegraf<Context>) => {
 };
 
 const deleteJob = async () => {
+  
   await swineRepository.deleteDead();
 };
 
